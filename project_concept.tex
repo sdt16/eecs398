@@ -27,10 +27,17 @@ This project has quite a few objectives
 Wireless!
 
 \subsection{Bluetooth Functionality Android-side}
-Java!
+\begin{itemize}
+	\item We will be writing an Android app to receive data from the OBD reader.
+	\item We will use the Android SDK to implement the bluetooth functionality
+	\item The app will be able to display all of the basic messages from the diagnostic part of OBD.
+	\item This includes the fault codes, monitor readiness, and whether the malfunction indicator light (MIL) is on or off.
+	\item The OBD fault codes follow a pattern of N0000, a letter followed by 4 numbers. The app will contain the database of all of the standard codes and their meanings for easy lookup. 
+	\item  The monitor readiness is indicating whether the all of the monitors used by the OBD system are ready to make a reading. They are reset when the OBD system is reset, and if the monitors are set to not ready, the car will fail any emissions check performed by a DMV. 
+	\item The MIL is the light commonly known as the check engine light. 
+\end{itemize}
 
 \subsection{Cryptographically Securing Messages}
-Using generic over the counter crypto
 
 \subsection{Power Requirements}
 Needs to be able to be powered of car's power.
