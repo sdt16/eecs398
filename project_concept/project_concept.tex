@@ -1,0 +1,81 @@
+\documentclass[12pt,letterpaper]{article}
+
+\title{
+\textbf{\LARGE OBD Stuff and Things} \\
+\Large Project Concept Document
+}
+
+\author{
+\normalsize Patrick Landis (pal25) \\
+\normalsize Schuyler Thompson (sdt16)
+}
+	
+\date{\normalsize January 21, 2013}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II), is used for everything from reading fuel levels, to checking engine warnings for diagnostic purposes. The OBD-II specification specifically requires cars to make available a port in every car that can be used to read messages. A device is then plugged into this port to read messages over various protocols implemented by the car manufacturer. Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure.
+
+
+\section{Project Requirements}
+This project has quite a few objectives because there are quite a few parts to it. In Appendix I is a diagram to show the purposed information exchange for this project.
+
+\subsection {OBD-II Interface Board (OIB)}
+\begin{itemize}
+	\item The biggest requirement for this project is the development of a circuit which will have the functionality to interface directly to a car's OBD-II port. 
+	\item This board will need to be able to act as a transceiver with the OBD-II port. \\
+	\item The board will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
+	\begin{enumerate}
+		\item SAE J/1850 (PWM/VPW)
+		\item ISO 15765-2 / SAE J2284 (CAN)
+		\item SAE J2411 (Single Wire CAN)
+		\item ISO 9141-2/14230-4 (Keyword Protocol)
+		\item Ford DCL (Mostly Depreciated) 
+	\end{enumerate}
+	\item This board will be required to communicate with the Bluetooth interface board (BIB) in via some still-undecided standard protocol.
+	\item This board will be powered from the OBD-II port. Which will mean adding voltage regulators, most likely linear voltage regulators.
+\end{itemize}
+
+\subsection{Bluetooth Interface Board (BIB)}
+\begin{itemize}
+	\item This board must be able to communicate with the OBD-II interface board via some still-undecided standard protocol.
+	\item This board will also be responsible for implementing the encryption scheme via some still-undecided scheme. (See crypto section)
+	\item This board will be responsible for communicating via Bluetooth to Android enabled devices.
+\end{itemize}
+
+\subsection{Bluetooth Functionality Android-side}
+Java!
+
+\subsection{Cryptographically Securing Messages}
+The board/device that implements crypto functionality will be responsible for:
+
+\begin{itemize}
+	\item Storing a private key.
+	\item Generating a public key upon request.
+	\item Validating devices to use with the OIB.
+	\item Encrypting messages using some still-undecided protocol.
+	\item Communicating these encrypted messages to other parts of the system.
+	\item Decrypting messages received from the BIB.
+\end{itemize}
+
+\newpage
+
+\section{Appendix I}
+\begin{figure}[!ht]
+\centering
+\includegraphics[totalheight=15cm]{images/info_exchange_diagram.eps}
+\caption{Information Flow Diagram}
+\label{fig: image}
+\end{figure}
+
+\end{document}
+
+
+
+
+
