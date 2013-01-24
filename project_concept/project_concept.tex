@@ -60,15 +60,13 @@ This project has quite a few objectives because there are quite a few parts to i
 \end{itemize}
 
 \subsection{Cryptographically Securing Messages}
-The board/device that implements crypto functionality will be responsible for:
+We will use Bluetooth's Secure Simple Pairing for security. This is mandatory for all BT 2.1+ devices.
 
 \begin{itemize}
-	\item Storing a private key.
-	\item Generating a public key upon request.
-	\item Validating devices to use with the OIB.
-	\item Encrypting messages using some still-undecided protocol.
-	\item Communicating these encrypted messages to other parts of the system.
-	\item Decrypting messages received from the BIB.
+	\item Form of public key cryptography.
+	\item Use ``Just Works" form of pairing.
+	\item Phone will generate key.
+	\item Requires both devices to acknowledge the pairing request.
 \end{itemize}
 
 \newpage
