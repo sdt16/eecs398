@@ -25,11 +25,11 @@ Every car in the United States since 1996 is required, by law, to contain on-boa
 \section{Project Requirements}
 This project has quite a few objectives because there are quite a few parts to it. In Appendix I is a diagram to show the purposed information exchange for this project.
 
-\subsection {OBD-II Interface Board (OIB)}
+\subsection {OBD-II Interface Component}
 \begin{itemize}
 	\item The biggest requirement for this project is the development of a circuit which will have the functionality to interface directly to a car's OBD-II port. 
-	\item This board will need to be able to act as a transceiver with the OBD-II port. \\
-	\item The board will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
+	\item This component will need to be able to act as a transceiver with the OBD-II port.
+	\item The component will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
 	\begin{enumerate}
 		\item SAE J/1850 (PWM/VPW)
 		\item ISO 15765-2 / SAE J2284 (CAN)
@@ -37,16 +37,24 @@ This project has quite a few objectives because there are quite a few parts to i
 		\item ISO 9141-2/14230-4 (Keyword Protocol)
 		\item Ford DCL (Mostly Depreciated) 
 	\end{enumerate}
-	\item This board will be required to communicate with the Bluetooth interface board (BIB) in via some still-undecided standard protocol.
-	\item This board will be powered from the OBD-II port. Which will mean adding voltage regulators, most likely linear voltage regulators.
+	\item This component will be required to communicate with the central microcontroller in via some still-undecided standard protocol.
+	\item This component will be powered from the OBD-II port.
 \end{itemize}
 
-\subsection{Bluetooth Interface Board (BIB)}
+\subsection{Bluetooth Interface Component}
 \begin{itemize}
-	\item This board must be able to communicate with the OBD-II interface board via some still-undecided standard protocol.
-	\item This board will also be responsible for implementing the encryption scheme via some still-undecided scheme. (See crypto section)
+	\item This component will be required to communicate with the central microcontroller in via some still-undecided standard protocol.
 	\item This board will be responsible for communicating via Bluetooth to Android enabled devices.
+	\item This component will be powered from the OBD-II port.
 \end{itemize}
+
+\subsection{Central MCU}
+\begin{itemize}
+	\item This MCU must be able to communicate with the OBD-II interface component via some still-undecided standard protocol.
+	\item This MCU must be able to communicate with the Bluetooth interface component via some still-undecided standard protocol.
+	\item This component will be powered from the OBD-II port.
+	\item MCU will be used to control message flow of the system.
+\end{itemize} 
 
 \subsection{Bluetooth Functionality Android-side}
 \begin{itemize}
@@ -63,10 +71,9 @@ This project has quite a few objectives because there are quite a few parts to i
 We will use Bluetooth's Secure Simple Pairing for security. This is mandatory for all BT 2.1+ devices.
 
 \begin{itemize}
-	\item Form of public key cryptography.
 	\item Use ``Just Works" form of pairing.
-	\item Phone will generate key.
-	\item Requires both devices to acknowledge the pairing request.
+	\item The pairing key will be stored on the non-Android side of communication.
+	\item Both devices must acknowledge the pairing request.
 \end{itemize}
 
 \newpage
