@@ -2,7 +2,7 @@
 
 \title{
 \textbf{\LARGE OBD Bluetooth Interface and Android App} \\
-\Large Project Concept Document
+\Large Project Proposal Document
 }
 
 \author{
@@ -11,7 +11,7 @@
 \normalsize Advisor: Swarup Bhunia, PhD
 }
 	
-\date{\normalsize January 21, 2013}
+\date{\normalsize January 28, 2013}
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{epstopdf}
@@ -19,14 +19,17 @@
 \begin{document}
 \maketitle
 
-\section{Introduction}
+\newpage
+
+\section{Technical}
+\subsection{Problem Description}
 Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II), is used for everything from reading fuel levels, to checking engine warnings for diagnostic purposes. The OBD-II specification specifically requires cars to make available a port in every car that can be used to read messages. A device is then plugged into this port to read messages over various protocols implemented by the car manufacturer. Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure.
 
 
-\section{Project Requirements}
+\subsection{Project Specifications}
 This project has quite a few objectives because there are quite a few parts to it. In Appendix I is a diagram to show the purposed information exchange for this project.
 
-\subsection {OBD-II Interface Component}
+\subsubsection{OBD-II Interface Component}
 \begin{itemize}
 	\item The biggest requirement for this project is the development of a circuit which will have the functionality to interface directly to a car's OBD-II port. 
 	\item This component will need to be able to act as a transceiver with the OBD-II port.
@@ -42,14 +45,14 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item This component will be powered from the OBD-II port.
 \end{itemize}
 
-\subsection{Bluetooth Interface Component}
+\subsubsection{Bluetooth Interface Component}
 \begin{itemize}
 	\item This component will be required to communicate with the central microcontroller in via some still-undecided standard protocol.
 	\item This board will be responsible for communicating via Bluetooth to Android enabled devices.
 	\item This component will be powered from the OBD-II port.
 \end{itemize}
 
-\subsection{Central MCU}
+\subsubsection{Central MCU}
 \begin{itemize}
 	\item This MCU must be able to communicate with the OBD-II interface component via some still-undecided standard protocol.
 	\item This MCU must be able to communicate with the Bluetooth interface component via some still-undecided standard protocol.
@@ -57,7 +60,7 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item MCU will be used to control message flow of the system.
 \end{itemize} 
 
-\subsection{Bluetooth Functionality Android-side}
+\subsubsection{Bluetooth Functionality Android-side}
 \begin{itemize}
 	\item We will be writing an Android app to receive data from the OBD reader.
 	\item We will use the Android SDK to implement the bluetooth functionality
@@ -68,7 +71,7 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item The MIL is the light commonly known as the check engine light. 
 \end{itemize}
 
-\subsection{Cryptographically Securing Messages}
+\subsubsection{Cryptographically Securing Messages}
 We will use Bluetooth's Secure Simple Pairing for security. This is mandatory for all BT 2.1+ devices.
 
 \begin{itemize}
@@ -77,9 +80,21 @@ We will use Bluetooth's Secure Simple Pairing for security. This is mandatory fo
 	\item Both devices must acknowledge the pairing request.
 \end{itemize}
 
+\subsection{Strategy for Achieving Objectives}
+
+\subsection{Verification and/or Testing}
+
+\section{Management}
+\subsection{Team Complement}
+
+\subsection{Project Management Plan}
+
+\subsection{Budget}
+
 \newpage
 
-\section{Appendix I}
+\section{Appendicies}
+\subsection{Appendix I}
 \begin{figure}[!ht]
 \centering
 \includegraphics[totalheight=15cm]{images/info_exchange_diagram.eps}
