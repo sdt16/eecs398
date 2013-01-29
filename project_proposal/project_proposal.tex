@@ -96,6 +96,34 @@ This section doesn't describe any specific component of the system. This section
 \subsection{Strategy for Achieving Objectives}
 
 \subsection{Verification and/or Testing}
+\subsubsection{OBD-II Interface Component}
+Because OBD-II simulators are expensive a live car will need to be used for the functional testing of signals pertaining to the OBD-II port. Below is a list of tests that will need to be completed to verify that the OBD-II interface board is properly working.
+
+\begin{itemize}
+\item Any regulator circuits will be bench-tested. The OBD-II port supplies power from a cars battery and is usually fuse-protected with the cigarette lighter (usually 10-15A fuse). The regulators will be tested to make sure the regulators are properly supplying power at 5V and/or 3.3V from 12V bench supply.
+\item To ensure that signals are being properly parsed, any messages received will be measured against a known functional "scanner tool" used by technicians.
+\item This interface component will be tested on different vehicle brands to test the different communication protocols.
+\end{itemize}
+
+\subsubsection{Bluetooth Interface Component}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Central Microcontroller}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Bluetooth Functionality Android-side}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Cryptographically Securing Messages}
+\begin{itemize}
+\item Whatever
+\end{itemize}
 
 \section{Management}
 \subsection{Team Complement}
@@ -108,11 +136,15 @@ This section doesn't describe any specific component of the system. This section
 \subsection{Project Management Plan}
 
 \subsection{Budget}
-\begin{tabular}{| l | p{10cm} | r |}
+\begin{tabular}{| l | p{7cm} | r |}
 \hline
 Item & Description & Price (\$ USD) \\ \hline
 STN1110 & OBD-II Interface core & 0.00 (Free samples) \\ \hline
 Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 \\ \hline
+Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 (Free samples) \\ \hline
+Scanner Tool & To test/validate OBD messages & 15.00 \\ \hline
+PCB Fabrication & If needed, paid by circuits lab & 0.00 \\ \hline
+Misc. Components & If needed, paid by circuits lab & 0.00 \\ \hline
 \hline
 Total && 19.90 \\ \hline
 \end{tabular}
