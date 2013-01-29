@@ -111,12 +111,14 @@ Because OBD-II simulators are expensive a live car will need to be used for the 
 
 \subsubsection{Bluetooth Interface Component}
 \begin{itemize}
-\item Whatever
+\item The bluetooth module is controlled though the microcontroller, so the testing will be done with that.
+\item If there is an electrical problem, the specification sheet contains all of the information needed to troubleshoot.
 \end{itemize}
 
 \subsubsection{Central Microcontroller}
 \begin{itemize}
-\item Whatever
+\item The code will be unit tested for all functionality.
+\item There will be a test program for sending basic bluetooth commands. This will allow easy determination if a problem is bluetooth related or higher level than that.
 \end{itemize}
 
 \subsubsection{Bluetooth Functionality Android-side}
