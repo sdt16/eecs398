@@ -16,6 +16,7 @@
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{pgfgantt}
+\usepackage{indentfirst}
 
 \begin{document}
 \maketitle
@@ -24,15 +25,18 @@
 
 \section{Technical}
 \subsection{Problem Description}
-Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II), is used for everything from reading fuel levels, to checking engine warnings for diagnostic purposes. The OBD-II specification specifically requires cars to make available a port in every car that can be used to read messages. A device is then plugged into this port to read messages over various protocols implemented by the car manufacturer. Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure.
+Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II). The OBD-II specification officialy requires a few different things. The OBD-II specification requires that all cars make available data link connector and also place restrictions on where they can be placed. The specification defines a set of standard diagnostic trouble codes, the freeze frame (which is sort of like a black box), and requirements for MIL lighting (which deals with the check engine light). In addition it also defines specific terminology for emissions controls components, defines diagnostic trouble codes. A device is then plugged into the data link port to read messages over various protocols implemented by the car manufacturer. \\*
+
+Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Furthermore the current solutions only have basic functionality and are primairly for technicions. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure. By allowing for cryptographically secure wireless OBD-II messages to be transferred to fairly ubiqutious Android-enabled devices this project is geared to enthusiasts and curious electronic hackers.
 
 
 \subsection{Project Specifications}
-This project has quite a few objectives because there are quite a few parts to it. In Appendix I is a diagram to show the purposed information exchange for this project.
+This project has quite a few objectives because there are quite a few parts to it. This section will refer to Appendix I, a diagram which shows the information exchange, to clarify things.
 
 \subsubsection{OBD-II Interface Component}
 \begin{itemize}
-	\item The biggest requirement for this project is the development of a circuit which will have the functionality to interface directly to a car's OBD-II port. 
+	\item This component requires a circuit which will have the functionality to interface directly to a car's OBD-II port. 
+	\item This component is required to plug into the data link connector specificed in the OBD-II specification SAE J1962
 	\item This component will need to be able to act as a transceiver with the OBD-II port.
 	\item The component will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
 	\begin{enumerate}
@@ -42,23 +46,28 @@ This project has quite a few objectives because there are quite a few parts to i
 		\item ISO 9141-2/14230-4 (Keyword Protocol)
 		\item Ford DCL (Mostly Depreciated) 
 	\end{enumerate}
-	\item This component will be required to communicate with the central microcontroller in via some still-undecided standard protocol.
+	\item This component will be required to communicate with the central microcontroller in via UART.
 	\item This component will be powered from the OBD-II port.
+	\item This component will be responsible for buffering messages until they can be sent to the MCU.
 \end{itemize}
 
 \subsubsection{Bluetooth Interface Component}
 \begin{itemize}
-	\item This component will be required to communicate with the central microcontroller in via some still-undecided standard protocol.
+	\item This component will be required to adhere to the Bluetooth 2.1+ specification.
+	\item This component will be required to communicate with the central microcontroller in via UART.
 	\item This board will be responsible for communicating via Bluetooth to Android enabled devices.
 	\item This component will be powered from the OBD-II port.
+	\item This component will be responsible for setting up Bluetooth communications with Android enabled devices.
+	\item This component will be responsible for neogeotiating the shared key for cryptography purposes.
 \end{itemize}
 
-\subsubsection{Central MCU}
+\subsubsection{Central Microcontroller}
 \begin{itemize}
-	\item This MCU must be able to communicate with the OBD-II interface component via some still-undecided standard protocol.
-	\item This MCU must be able to communicate with the Bluetooth interface component via some still-undecided standard protocol.
+	\item This MCU must be able to communicate with the OBD-II interface component via UART.
+	\item This MCU must be able to communicate with the Bluetooth interface component via UART.
 	\item This component will be powered from the OBD-II port.
 	\item MCU will be used to control message flow of the system.
+	\item The MCU with be required to store a list of recent pairing keys to allow Android devices to auto-connect.
 \end{itemize} 
 
 \subsubsection{Bluetooth Functionality Android-side}
@@ -77,17 +86,45 @@ This project has quite a few objectives because there are quite a few parts to i
 \end{itemize}
 
 \subsubsection{Cryptographically Securing Messages}
-We will use Bluetooth's Secure Simple Pairing for security. This is mandatory for all BT 2.1+ devices.
+This section doesn't describe any specific component of the system. This section describes functional requirements for the overall system to cryptographically secure wireless messages. The basis of this approach is to use Bluetooth's Secure Simple Pairing for security. This pairing protcol is mandatory for all BT 2.1+ devices.
 
 \begin{itemize}
-	\item Use ``Just Works" form of pairing.
-	\item The pairing key will be stored on the non-Android side of communication.
+	\item Will use ``Just Works" form of pairing.
+	\item The pairing key will be stored on the non-Android side of communication in the MCU.
 	\item Both devices must acknowledge the pairing request.
 \end{itemize}
 
 \subsection{Strategy for Achieving Objectives}
 
 \subsection{Verification and/or Testing}
+\subsubsection{OBD-II Interface Component}
+Because OBD-II simulators are expensive a live car will need to be used for the functional testing of signals pertaining to the OBD-II port. Below is a list of tests that will need to be completed to verify that the OBD-II interface board is properly working.
+
+\begin{itemize}
+\item Any regulator circuits will be bench-tested. The OBD-II port supplies power from a cars battery and is usually fuse-protected with the cigarette lighter (usually 10-15A fuse). The regulators will be tested to make sure the regulators are properly supplying power at 5V and/or 3.3V from 12V bench supply.
+\item To ensure that signals are being properly parsed, any messages received will be measured against a known functional "scanner tool" used by technicians.
+\item This interface component will be tested on different vehicle brands to test the different communication protocols.
+\end{itemize}
+
+\subsubsection{Bluetooth Interface Component}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Central Microcontroller}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Bluetooth Functionality Android-side}
+\begin{itemize}
+\item Whatever
+\end{itemize}
+
+\subsubsection{Cryptographically Securing Messages}
+\begin{itemize}
+\item Whatever
+\end{itemize}
 
 \section{Management}
 \subsection{Team Complement}
@@ -102,13 +139,17 @@ We will use Bluetooth's Secure Simple Pairing for security. This is mandatory fo
 
 
 \subsection{Budget}
-\begin{tabular}{| l | p{10cm} | r |}
+\begin{tabular}{| l | p{7cm} | r |}
 \hline
 Item & Description & Price (\$ USD) \\ \hline
-STN1110 & OBD-II Interface Transceiver & 9.00? \\ \hline
-Bluetooth thing & Does bluetooth stuff & 50.00 \\ \hline
+STN1110 & OBD-II Interface core & 0.00 (Free samples) \\ \hline
+Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 \\ \hline
+Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 (Free samples) \\ \hline
+Scanner Tool & To test/validate OBD messages & 15.00 \\ \hline
+PCB Fabrication & If needed, paid by circuits lab & 0.00 \\ \hline
+Misc. Components & If needed, paid by circuits lab & 0.00 \\ \hline
 \hline
-Total && 59.00 \\ \hline
+Total && 19.90 \\ \hline
 \end{tabular}
 
 \newpage
