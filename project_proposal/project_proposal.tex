@@ -101,7 +101,7 @@ This section doesn't describe any specific component of the system. This section
 Because OBD-II simulators are expensive a live car will need to be used for the functional testing of signals pertaining to the OBD-II port. Below is a list of tests that will need to be completed to verify that the OBD-II interface board is properly working.
 
 \begin{itemize}
-\item Any regulator circuits will be bench-tested. The OBD-II port supplies power from a cars battery and is usually fuse-protected with the cigarette lighter (usually 10-15A fuse). The regulators will be tested to make sure the regulators are properly supplying power at 5V and/or 3.3V from 12V bench supply.
+\item Any regulator circuits will be bench-tested. The OBD-II port supplies power from a car's battery and is usually fuse-protected with the cigarette lighter (usually 10-15A fuse). The regulators will be tested to make sure the regulators are properly supplying power at 5V and/or 3.3V from 12V bench supply.
 \item To ensure that signals are being properly parsed, any messages received will be measured against a known functional ``scanner tool" used by technicians.
 \item This interface component will be tested on different vehicle brands to test the different communication protocols.
 \end{itemize}
@@ -118,12 +118,16 @@ Because OBD-II simulators are expensive a live car will need to be used for the 
 
 \subsubsection{Bluetooth Functionality Android-side}
 \begin{itemize}
-\item Whatever
+\item The code will be unit tested before it goes on the device to verify basic functionality.
+\item The Android emulator included in the Android SDK will be used to test the user interface as the software is being developed. 
+\item An Android VM (separate from the emulator) will be used to test the bluetooth functionality. The VM is harder to work with, but the emulator does not support testing bluetooth. 
+\item There will be a separate test within the app to test the bluetooth application level protocol. This will be useful for debugging, in order to quickly verify if issues are protocol related or another issue. 
 \end{itemize}
 
 \subsubsection{Cryptographically Securing Messages}
 \begin{itemize}
-\item Whatever
+\item This is a feature of the bluetooth standard, so if the devices pair, the Android phone will indicate if the communication is secure. 
+\item A second phone will be used to verify that another phone cannot be paired without the permission of the permission of the board bluetooth module.
 \end{itemize}
 
 \section{Management}
