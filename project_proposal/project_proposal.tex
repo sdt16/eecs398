@@ -19,7 +19,12 @@
 \usepackage{indentfirst}
 
 \begin{document}
+
 \maketitle
+\newpage
+
+\section*{Executive Summary}
+A user with an Android based phone will be able to read and interpret diagnostic and operational data from their 1996 model year or newer car. On some models, they will be able to control some aspects of the car, such as starting the engine or rolling down the windows. This will be accomplished by having their Android device pair with a OBD (On-board Diagnostic) interface that is connected to the car over bluetooth, using a secure channel. 
 
 \newpage
 
@@ -96,8 +101,21 @@ This section doesn't describe any specific component of the system. This section
 
 \subsection{Project Work Strategy}
 
+All of the above components need to be designed and built. 
 
-\subsection{Strategy for Achieving Objectives}
+Technical tasks that need to be done:
+
+\begin{itemize}
+\item Design OBD interface board
+\item Design layout of Android app
+\item Design bluetooth board and interface
+\item Pair with bluetooth module, send and receive data
+\item Interpret data, display basic info about received data
+\item Complete user interface: the app will work according to the spec
+\item Implement OBD board according to schematic
+\item Implement bluetooth board according to schematic
+\item Interface the boards, program the microcontrollers
+\end{itemize}
 
 \subsection{Verification and/or Testing}
 \subsubsection{OBD-II Interface Component}
