@@ -25,9 +25,9 @@
 
 \section{Technical}
 \subsection{Problem Description}
-Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II). The OBD-II specification officialy requires a few different things. The OBD-II specification requires that all cars make available data link connector and also place restrictions on where they can be placed. The specification defines a set of standard diagnostic trouble codes, the freeze frame (which is sort of like a black box), and requirements for MIL lighting (which deals with the check engine light). In addition it also defines specific terminology for emissions controls components, defines diagnostic trouble codes. A device is then plugged into the data link port to read messages over various protocols implemented by the car manufacturer. \\*
+Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II). The OBD-II specification officially requires a few different things. The OBD-II specification requires that all cars make available data link connector and also place restrictions on where they can be placed. The specification defines a set of standard diagnostic trouble codes, the freeze frame (which is sort of like a black box), and requirements for MIL lighting (which deals with the check engine light). In addition it also defines specific terminology for emissions controls components, defines diagnostic trouble codes. A device is then plugged into the data link port to read messages over various protocols implemented by the car manufacturer. \\*
 
-Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Furthermore the current solutions only have basic functionality and are primairly for technicions. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure. By allowing for cryptographically secure wireless OBD-II messages to be transferred to fairly ubiqutious Android-enabled devices this project is geared to enthusiasts and curious electronic hackers.
+Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Furthermore the current solutions only have basic functionality and are primarily for technicians. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure. By allowing for cryptographically secure wireless OBD-II messages to be transferred to fairly ubiquitous Android-enabled devices this project is geared to enthusiasts and curious electronic hackers.
 
 
 \subsection{Project Specifications}
@@ -36,7 +36,7 @@ This project has quite a few objectives because there are quite a few parts to i
 \subsubsection{OBD-II Interface Component}
 \begin{itemize}
 	\item This component requires a circuit which will have the functionality to interface directly to a car's OBD-II port. 
-	\item This component is required to plug into the data link connector specificed in the OBD-II specification SAE J1962
+	\item This component is required to plug into the data link connector specified in the OBD-II specification SAE J1962
 	\item This component will need to be able to act as a transceiver with the OBD-II port.
 	\item The component will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
 	\begin{enumerate}
@@ -58,7 +58,7 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item This board will be responsible for communicating via Bluetooth to Android enabled devices.
 	\item This component will be powered from the OBD-II port.
 	\item This component will be responsible for setting up Bluetooth communications with Android enabled devices.
-	\item This component will be responsible for neogeotiating the shared key for cryptography purposes.
+	\item This component will be responsible for negotiating the shared key for cryptography purposes.
 \end{itemize}
 
 \subsubsection{Central Microcontroller}
@@ -86,7 +86,7 @@ This project has quite a few objectives because there are quite a few parts to i
 \end{itemize}
 
 \subsubsection{Cryptographically Securing Messages}
-This section doesn't describe any specific component of the system. This section describes functional requirements for the overall system to cryptographically secure wireless messages. The basis of this approach is to use Bluetooth's Secure Simple Pairing for security. This pairing protcol is mandatory for all BT 2.1+ devices.
+This section doesn't describe any specific component of the system. This section describes functional requirements for the overall system to cryptographically secure wireless messages. The basis of this approach is to use Bluetooth's Secure Simple Pairing for security. This pairing protocol is mandatory for all BT 2.1+ devices.
 
 \begin{itemize}
 	\item Will use ``Just Works" form of pairing.
