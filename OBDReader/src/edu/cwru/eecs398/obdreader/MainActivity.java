@@ -1,19 +1,24 @@
 package edu.cwru.eecs398.obdreader;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -25,6 +30,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     
     private final static int REQUEST_ENABLE_BT = 7590;
+    
+    private BluetoothAdapter btAdapter;
+    
+    private BluetoothDevice pickedDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +49,49 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.addTab(actionBar.newTab().setText(R.string.title_section2).setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText(R.string.title_section3).setTabListener(this));
         
-        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (btAdapter == null) {
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (btAdapter == null) {
 			//device doesn't support bt
 		}
 		
 		if (!btAdapter.isEnabled()) {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+		} else {
+			pickBtDevice();
+		}
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (requestCode == REQUEST_ENABLE_BT) {
+    		if (resultCode == RESULT_OK) {
+    			pickBtDevice();
+    		} else {
+    			//bt is off
+    		}
+    	}
+    }
+    
+    private void pickBtDevice() {
+    	final ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>(btAdapter.getBondedDevices());
+		if (pairedDevices.size() > 0) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.pick_bt_device);
+			String[] deviceStrings = new String[pairedDevices.size()];
+			for (int i = 0; i<pairedDevices.size(); i++) {
+				deviceStrings[i] = pairedDevices.get(i).getName() + " (" + pairedDevices.get(i).getAddress() + ")\n";
+			}
+			builder.setItems(deviceStrings, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					//pickedDevice = pairedDevices.get(which);
+					BluetoothConnectionThread connectionThread = new BluetoothConnectionThread(pairedDevices.get(which), btAdapter);
+					connectionThread.start();
+				}
+			});
+			builder.show();
 		}
     }
 

@@ -7,5 +7,6 @@
     <string name="title_section1">Fault Codes</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="pick_bt_device">Pick the OBD bluetooth device</string>
 
 </resources>
