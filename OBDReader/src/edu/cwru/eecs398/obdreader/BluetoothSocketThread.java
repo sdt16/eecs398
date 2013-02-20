@@ -37,7 +37,9 @@ public class BluetoothSocketThread extends Thread {
 			while (true) {
 				if (inputStream.available() > 0) {
 					read = inputStream.read();
-					break;
+					Log.d("OBD", "Value read from socket is: " + read);
+					outputStream.write(read);
+					//break;
 				}
 			}
 			
@@ -45,7 +47,7 @@ public class BluetoothSocketThread extends Thread {
 			Log.e("OBD", "Error reading from input stream", e);
 		}
 		
-		Log.d("OBD", "Value read from socket is: " + read);
+		
 	}
 
 }

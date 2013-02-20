@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -52,9 +53,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (btAdapter == null) {
 			//device doesn't support bt
-		}
-		
-		if (!btAdapter.isEnabled()) {
+		} else if (!btAdapter.isEnabled()) {
 			Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 		    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		} else {
@@ -158,10 +157,21 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 Bundle savedInstanceState) {
             // Create a new TextView and set its text to the fragment's section
             // number argument value.
-            TextView textView = new TextView(getActivity());
-            textView.setGravity(Gravity.CENTER);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return textView;
+        	
+        	if (getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
+                ListView listView = new ListView(getActivity());
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
+                arrayAdapter.add("P0171");
+                listView.setAdapter(arrayAdapter);
+                return listView;
+        	} else {
+        		TextView textView = new TextView(getActivity());
+                textView.setGravity(Gravity.CENTER);
+                textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+                return textView;
+        	}
+        	
+
         }
     }
 
