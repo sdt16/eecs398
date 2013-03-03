@@ -29,11 +29,27 @@ A user with an Android based phone will be able to read and interpret diagnostic
 \newpage
 
 \section{Introduction}
+\subsection{General Information}
 Every car in the United States since 1996 is required, by law, to contain on-board diagnostics. This standard, codified in SAE J1939 as on-board diagnostics II (OBD-II). The OBD-II specification officially requires a few different things. The OBD-II specification requires that all cars make available data link connector and also place restrictions on where they can be placed. The specification defines a set of standard diagnostic trouble codes, the freeze frame (which is sort of like a black box from an airplane, in that it records when something goes wrong), and requirements for MIL lighting (which deals with the check engine light). In addition it also defines specific terminology and acceptable limits for emissions controls components. A device is then plugged into the data link port to read messages over various protocols implemented by the car manufacturer. \\
 
-Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Furthermore the current solutions only have basic functionality and are primarily for technicians. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure. By allowing for cryptographically secure wireless OBD-II messages to be transferred to fairly ubiquitous Android-enabled devices this project is geared to enthusiasts and curious electronic hackers.
+Currently, technicians must manually plug in a device into this port in order to read OBD-II messages. Furthermore the current solutions only have basic functionality and are primarily for technicians. Our project aims to add wireless functionality for OBD-II via Bluetooth to be interfaced with Android compatible devices. Furthermore this project aims to make communication cryptographically secure. By allowing for cryptographically secure wireless OBD-II messages to be transferred to fairly ubiquitous Android-enabled devices this project is geared to enthusiasts and curious electronic hackers. \\
 
-There are numorous design problems being tackled here. One of the primary ones is the interfacing with all of the different protocols OBD-II supports. These each have very different electrical chararataristics, and need a separate circuit designed for each one of them. Another problem is keeping the power consuption low so the whole system can be powered off of a car's battery. This also presents the problem of dealing with a non-reliable power source. Car batteries' voltage is notoriously non-stable. The system needs to be able to deal with this problem and provide stable 5V and 3.3V rails. 
+There are numerous design problems being tackled here. One of the primary ones is the interfacing with all of the different protocols OBD-II supports. These each have very different electrical chararataristics, and need a separate circuit designed for each one of them. Another problem is keeping the power consuption low so the whole system can be powered off of a car's battery. This also presents the problem of dealing with a non-reliable power source. Car batteries' voltage is notoriously non-stable. The system needs to be able to deal with this problem and provide stable 5V and 3.3V rails. \\
+
+Another problem is interfacing the purposed device with all five of the OBD-II supported protocols. Not only do all of these protocols need to be supporedt but the device must figure out which protocol a car is using to communicate, the problem is further complicated with the fact that some of the protocols have the same physical layer which others share the same data-link layer of the communication stack. 
+
+\subsection{The Five Protocols}
+\subsubsection{SAE J1850 VPW}
+The J1850 VPW is a communication protocol used by GM cars between 1996 and 2008. It is a variable pulse width protocol which runs at 10.4 kbps. Since the protocol is used on a bus it uses carrier sense multiple access and non-destructive arbitration (CSMA/NDA) to decide who communicates along the bus. Essentially what happens is that the if two signals ever compete for time on the communication bus the signal with the highest priority will win. It should be notec that the J1850 VPW and J1850 PWM protocls share the same data-link layer even though their physical layers are quite different. The message length is restricted to 11 bits, including its cyclical-redundancy check (CRC).
+ 
+\subsubsection{SAE J1850 PWM}
+The J1850 PWM communication protocol, primarily used in Ford vehicles, is a pulse width modulated signal. The protocols specified frequency is 41.6 kbps and use the same bit arbitration scheme above when collisions on the bus occur, CSMA/NDA. It should be notec that the J1850 VPW and J1850 PWM protocls share the same data-link layer even though their physical layers are quite different.
+
+\subsubsection{ISO 9141-2 LIN and ISO 14230 Keyword Protocol 2000}
+The ISO 9141-2 protocol is implemented as a local interconnect network (LIN). It operates at a bit rate of 10.4 kbaud. Data collisions are taken care of by the transceivers in the network. It is a digital protocol meaning that messages are encoded simply as high or low voltages. ISO 9141-2 shares the same physical layer as ISO 14230.
+
+\subsubsection{ISO 15765 CAN}
+The ISO 15765 specifies the physical and data-link layer for a controller area network (CAN). The protocol operates on a range of bit rates from 250 kbps to 1 Mbps. Bit arbitration is taken care of by CSMA/NDA and messages are passed along a bus to nodes in the network. By 2008 all light weight vehicles sold in the US must implement the CAN protocol. There are two types of data-link layers for the CAN protocol, regular and extended.
 
 \section{Project Specifications}
 This project has quite a few objectives because there are quite a few parts to it. This section will refer to Appendix I, a diagram which shows the information exchange, to clarify things.
@@ -45,11 +61,11 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item This component will need to be able to act as a transceiver with the OBD-II port.
 	\item The component will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are:
 	\begin{enumerate}
-		\item SAE J/1850 (PWM/VPW)
-		\item ISO 15765-2 / SAE J2284 (CAN)
-		\item SAE J2411 (Single Wire CAN)
-		\item ISO 9141-2/14230-4 (Keyword Protocol)
-		\item Ford DCL (Mostly Depreciated) 
+		\item SAE J1850 (VPW)
+		\item SAE J1850 (PWM)
+		\item ISO 9141-2  (LIN)
+		\item ISO 14230 (Keyword Protocol 2000)
+		\item ISO 15765 (CAN)
 	\end{enumerate}
 	\item This component will be required to communicate with the central microcontroller in via UART.
 	\item This component will be powered from the OBD-II port.
@@ -101,7 +117,20 @@ This section doesn't describe any specific component of the system. This section
 
 \section{Methodology}
 \subsection{Introduction}
-The
+The group is using a variety of design principles to accomplish this design that happen in stages. The first stage of the design was the research portion of the project. This amounted to essentially reading up on OBD-II standards as well as Android development documentation. Some research effort was also put into looking up the market outlook for such a product. After the research phase was the design phase. In this phase of the project the hardware was designed and the Android applications functionality was outlined. Both of these portions were designed to the specifications listed above in section 2 of this document. \\
+
+In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. \\
+
+The software blah blah...
+
+\subsection{Chosen Design}
+\subsection{Alternative Designs}
+\subsection{Design Changes}
+
+\section{Results and Verification}
+\section{Administrative}
+\section{Design Implications}
+\section{Discussion and Conclusions}
 
 
 \end{document}
