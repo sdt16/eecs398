@@ -123,7 +123,7 @@ The group is using a variety of design principles to accomplish this design that
 In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. 
 
 \subsubsection{Software}
-The software blah blah...
+AND THIS
 
 \subsection{Chosen Design}
 
@@ -134,6 +134,7 @@ In terms of hardware a few designs were created and thrown out. Discarding desig
 Another problematic area in regard to the hardware design was the mixed signal circuits for the J1850 VPW/PWM protcols. Both protocols operate on the same data-link layer so it would be nice to have both signals input onto the same line into the OBD-II interface board. However since the protocols are quite different the team initially thought that it would be easier to simply implement the protocols separately and then have the MCU allocate extra space for both of the ommunication stacks. Such a design wasn't nesessary and the team was able to design both protocols using the same circuitry with a few tweaks to account for the protocols' differences.
 
 \subsubsection{Software}
+SCHUYLER DO THIS
 
 \subsection{Design Changes}
 Functionally no design changes have been needed since the project proposal?
@@ -156,24 +157,30 @@ The next step is to test the limits of the device to ensure that the device is i
 The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual envirnoment they in which they are meant to be used.
 
 \subsubsection{Software}
-
+DO THIS DAMNIT.
 
 \section{Administrative}
 \input{gantt_chart.tex}
 
 \section{Design Implications}
 \subsection{Budget}
-\begin{tabular}{| l | p{7cm} | c | r |}
+\begin{tabular}{| l | p{7cm} | c | c |}
 \hline
 Item & Description & Price (\$ USD) & Availability \\ \hline
 STN1110 & OBD-II Interface core & 0.00& Volitile \\ \hline
 Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 & Volitile \\ \hline
 Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 & Stable \\ \hline
 Scanner Tool & To test/validate OBD messages & 15.00 & Stable\\ \hline
+MCP2515 & CAN Encoder/Decoder (Testing only) & 1.98 & Stable\\ \hline
+MCP2551 & CAN Message Tranceiver & 0.00 & Stable\\ \hline
+16MHz Oscillator & Crystal quartz oscillator & 0.35 & Stable \\ \hline
+TI UA7805 & 5V Linear Regulator & 0.80 & Stable \\ \hline
+STM LD1117V33C & 3.3V Linear Regulator & 0.61 & Stable \\ \hline 
+\hline
 PCB Fabrication & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
 Misc. Components & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
 \hline
-Total && 34.90 & \\ \hline
+Total && 38.64 & \\ \hline
 \end{tabular}
 
 \subsection{Sustainability}
