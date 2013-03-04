@@ -17,6 +17,7 @@
 \usepackage{epstopdf}
 \usepackage{pgfgantt}
 \usepackage{indentfirst}
+\usepackage{float}
 
 \begin{document}
 
@@ -131,13 +132,40 @@ The app is also using the standard Android built-in themes so it will be visuall
 Finally, the app will only be using the bluetooth radio when needed, because using the radio uses a lot of battery on the phone. A big selling point on Android is making sure your app does not hold wakelocks that keep the phone's CPU in a high power state when not needed, because Android doesn't aggressively kill apps that use too much CPU.
 
 \subsection{Chosen Design}
-\begin{figure}[!ht]
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=20cm, angle=180]{images/circuit_sch.pdf}
+\caption{Circuit Schematics}
+\label{fig: image}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[page=2, totalheight=20cm, angle=180]{images/circuit_sch.pdf}
+\caption{Circuit Schematics}
+\label{fig: image}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[page=3, totalheight=20cm, angle=180]{images/circuit_sch.pdf}
+\caption{Circuit Schematics}
+\label{fig: image}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[page=4, totalheight=20cm, angle=180]{images/circuit_sch.pdf}
+\caption{Circuit Schematics}
+\label{fig: image}
+\end{figure}
+
+\begin{figure}[H]
 \centering
 \includegraphics[totalheight=15cm]{images/info_exchange_diagram.eps}
 \caption{Information Flow Diagram}
 \label{fig: image}
 \end{figure}
-
 
 \subsection{Alternative Designs}
 \subsubsection{Hardware}
