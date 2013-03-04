@@ -123,8 +123,11 @@ The group is using a variety of design principles to accomplish this design that
 In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. 
 
 \subsubsection{Software}
-The software blah blah...
+The software will be using the standard ELM327 OBD software protocol. This is a well supported serial protocol for communicating with OBD transceivers. This will allow the Android app to communicate with other ELM327 based OBD trancevers. The protocol serialization and deserialization is also well isolated in order to let us swap out a different command set if needed in the future without affecting the rest of the app. 
 
+The app is also using the standard Android built-in themes so it will be visually appealing. This makes it both easier to develop and potentially have higher sales because of the professional look. 
+
+Finally, the app will only be using the bluetooth radio when needed, because using the radio uses a lot of battery on the phone. A big selling point on Android is making sure your app does not hold wakelocks that keep the phone's CPU in a high power state when not needed, because Android doesn't aggressively kill apps that use too much CPU.
 \subsection{Chosen Design}
 
 \subsection{Alternative Designs}
@@ -134,9 +137,12 @@ In terms of hardware a few designs were created and thrown out. Discarding desig
 Another problematic area in regard to the hardware design was the mixed signal circuits for the J1850 VPW/PWM protcols. Both protocols operate on the same data-link layer so it would be nice to have both signals input onto the same line into the OBD-II interface board. However since the protocols are quite different the team initially thought that it would be easier to simply implement the protocols separately and then have the MCU allocate extra space for both of the ommunication stacks. Such a design wasn't nesessary and the team was able to design both protocols using the same circuitry with a few tweaks to account for the protocols' differences.
 
 \subsubsection{Software}
+The software design has been more straightforward. Android is well setup with both class hierarchy and documentation to guide programmers to the correct software design before starting. Combined with general software engineering practices this led to the preferred design. 
+
+The only thing that was potentially considered at the very beginning of the project was writing the app for iPhone instead. The requirements for a Mac combined with the cost of a iPhone SDK licence quickly ruled out the iPhone as a possibility. 
 
 \subsection{Design Changes}
-Functionally no design changes have been needed since the project proposal?
+Functionally no design changes have been needed since the project proposal.
 
 \section{Results}
 So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and test the CAN transceiver. \\
