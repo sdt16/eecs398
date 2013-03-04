@@ -129,7 +129,15 @@ The software will be using the standard ELM327 OBD software protocol. This is a 
 The app is also using the standard Android built-in themes so it will be visually appealing. This makes it both easier to develop and potentially have higher sales because of the professional look. 
 
 Finally, the app will only be using the bluetooth radio when needed, because using the radio uses a lot of battery on the phone. A big selling point on Android is making sure your app does not hold wakelocks that keep the phone's CPU in a high power state when not needed, because Android doesn't aggressively kill apps that use too much CPU.
+
 \subsection{Chosen Design}
+\begin{figure}[!ht]
+\centering
+\includegraphics[totalheight=15cm]{images/info_exchange_diagram.eps}
+\caption{Information Flow Diagram}
+\label{fig: image}
+\end{figure}
+
 
 \subsection{Alternative Designs}
 \subsubsection{Hardware}
@@ -164,7 +172,7 @@ The next step is to test the limits of the device to ensure that the device is i
 The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual envirnoment they in which they are meant to be used.
 
 \subsubsection{Software}
-DO THIS DAMNIT.
+It will be easy to verify that the correct data is flowing from the OBD side to the app because a serial console can be used to see the exact data going in and out. The app can be verified that the data is correct by looking at the serial console's output and comparing it to the data shown in the app. If it matches, the verification worked. The software simobd will also be used to simulate a generic ELM327 protocol device and can generate valid random data. This will allow us to test the app against data that might not be able to be replicated in the real world with the resources avalable. 
 
 \section{Administrative}
 \input{gantt_chart.tex}
@@ -183,11 +191,15 @@ MCP2551 & CAN Message Tranceiver & 0.00 & Stable\\ \hline
 16MHz Oscillator & Crystal quartz oscillator & 0.35 & Stable \\ \hline
 TI UA7805 & 5V Linear Regulator & 0.80 & Stable \\ \hline
 STM LD1117V33C & 3.3V Linear Regulator & 0.61 & Stable \\ \hline 
+DB9M Gender Adaptor & OBD connection & 5.35 & Stable \\ \hline
+CAB-10087 & OBD connector to DB9F & 9.95 & Stable \\ \hline
+BOB-08552 & Breakout Board for Serial DB9 & 0.95 & Stable \\ \hline
+PRT-00429 & DB9 Female Serial Connector & 1.50 & Stable \\ \hline
 \hline
 PCB Fabrication & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
 Misc. Components & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
 \hline
-Total && 38.64 & \\ \hline
+Total && 56.39 & \\ \hline
 \end{tabular}
 
 \subsection{Sustainability}
@@ -208,7 +220,5 @@ This project will have most of it's impact in the enthusiast market. The project
 
 \section{Discussion and Conclusions}
 The project is currently on schedule. The circuit design took slightly longer then expected, but the wireless communication over bluetooth was easier than expected. The net result is the project is still on schedule. This week the system should be commutating via CAN all the way to the bluetooth module. This will show up in the serial console and allow progress on the app to continue. 
-
-
 
 \end{document}
