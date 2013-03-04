@@ -134,6 +134,15 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 \subsection{Chosen Design}
 \begin{figure}[H]
 \centering
+\includegraphics[page=1, totalheight=20cm, angle=180]{images/mcu_sch.pdf}
+\caption{Microcontroller}
+\label{fig:mcu}
+\end{figure}
+
+\textbf{Figure \ref{fig:mcu}} contains the microcontroller. It's clocked at 16MHz and is used to gather data from the five OBD protocols. It also maintains a status LED's indicating state of the OBD bus.
+
+\begin{figure}[H]
+\centering
 \includegraphics[page=1, totalheight=20cm, angle=180]{images/circuit_sch.pdf}
 \caption{Power Supplies}
 \label{fig:ps}
