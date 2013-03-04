@@ -119,18 +119,73 @@ This section doesn't describe any specific component of the system. This section
 \subsection{Introduction}
 The group is using a variety of design principles to accomplish this design that happen in stages. The first stage of the design was the research portion of the project. This amounted to essentially reading up on OBD-II standards as well as Android development documentation. Some research effort was also put into looking up the market outlook for such a product. After the research phase was the design phase. In this phase of the project the hardware was designed and the Android applications functionality was outlined. Both of these portions were designed to the specifications listed above in section 2 of this document. \\
 
-In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. \\
+\subsubsection{Hardware}
+In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. 
 
+\subsubsection{Software}
 The software blah blah...
 
 \subsection{Chosen Design}
-\subsection{Alternative Designs}
-\subsection{Design Changes}
 
-\section{Results and Verification}
+\subsection{Alternative Designs}
+\subsubsection{Hardware}
+In terms of hardware a few designs were created and thrown out. Discarding designs that didn't work functionally after careful consideration one initial idea the team had was to use a Raspberry Pi to do the hardware backend jobs such as interpreting messages and sending them over Bluetooth. Such a design was discarded mostly due to cost and size of the device.\\ 
+
+Another problematic area in regard to the hardware design was the mixed signal circuits for the J1850 VPW/PWM protcols. Both protocols operate on the same data-link layer so it would be nice to have both signals input onto the same line into the OBD-II interface board. However since the protocols are quite different the team initially thought that it would be easier to simply implement the protocols separately and then have the MCU allocate extra space for both of the ommunication stacks. Such a design wasn't nesessary and the team was able to design both protocols using the same circuitry with a few tweaks to account for the protocols' differences.
+
+\subsubsection{Software}
+
+\subsection{Design Changes}
+Functionally no design changes have been needed since the project proposal?
+
+\section{Results}
+So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and test the CAN transceiver. \\
+
+ADD PHOTOS HERE.
+
+\section{Verification}
+\subsubsection{Hardware}
+
+\subsubsection{Software}
+
+
 \section{Administrative}
+GANTT CHART IT UP
+
 \section{Design Implications}
+\subsection{Budget}
+\begin{tabular}{| l | p{7cm} | c | r |}
+\hline
+Item & Description & Price (\$ USD) & Availability \\ \hline
+STN1110 & OBD-II Interface core & 0.00& Volitile \\ \hline
+Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 & Volitile \\ \hline
+Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 & Stable \\ \hline
+Scanner Tool & To test/validate OBD messages & 15.00 & Stable\\ \hline
+PCB Fabrication & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
+Misc. Components & If needed, paid by circuits lab & 0.00 & Stable\\ \hline
+\hline
+Total && 34.90 & \\ \hline
+\end{tabular}
+
+\subsection{Sustainability}
+\subsubsection{Product Lifetime}
+This device should be sustainable in the long-term. It is designed to use all solid-state components and is designed to survive the harsh conditions supplied from a vehicles battery. The hardware itself is designed to be left in cars and untouched. This is good since it will hopefully reduce the amount of exposure it has to unknown environments. The user is intended to interact only via Bluetooth to and from the device. 
+
+\subsubsection{Environmental Impact}
+OBD standards were adopted to curb emissions in vehicles and it is mandated as part of the standard that emissions data be made available. Since this device directly communicates with such data it is directly possible for users to know when there cars are not running up to emissions standards. If used on a mass scale this device has the potential to allow individuals to take more responsibility for their vehicles emissions. That being said the device itself would not be easily recyclable however the environmental impact is minimized by using only RoHS compliant parts which eliminates high levels of Cadmium, Lead, etc...
+
+\subsubsection{Repairability}
+The device itself could not be easily repaired since most of the parts are soldered on and solid state parts, however with proper documentation it would be possible to confer a decent amount of knowledge about the device and potential problem areas. The most common expected problem is dealing with unusually high voltage spikes from the battery, however this is mitigated by using fuses that can fairly easily be replaced.
+
+\subsubsection{Health Concerns}
+The main health concerns with this device revolve around RF signals. However that being said the Bluetooth module packaged with the device is FCC approved so any health risks are no worse than any other Bluetooth devices.
+
+\subsubsection{Commercial/Societal Impact}
+THIS MUCH IMPACT:     |--------|
+
 \section{Discussion and Conclusions}
+OUR DEVICE IS TUBULAR
+
 
 
 \end{document}
