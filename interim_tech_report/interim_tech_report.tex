@@ -157,7 +157,7 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 \label{fig:pwm/vpw}
 \end{figure}
 
-\textbf{Figure \ref{fig:pwm/vpw}} 
+\textbf{Figure \ref{fig:pwm/vpw}} contained the mixed signal circuitry to implement J185 JPW/PWM. The transmit portion is the same for both protocols. The resistors across the base of the NPN transistor are there to current limi and also bias the transistor to be normally off. The resistor connected directly to the collector is also there for current limiting and then the input to the PNP transistor is pulled-high to make the PNP always-off as well. The RC circuit is there to ensure that the digital signals have slightly rounded logic transitions, a requirement for VPW communication. The receiver circuitry is fairly straight forward. Essentially the positive lead for the J1850 protocols is compared to another voltage reference, different for each protocol, and that yields the digital logic values.
 
 \begin{figure}[H]
 \centering
@@ -166,7 +166,7 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 \label{fig:can}
 \end{figure}
 
-\textbf{Figure \ref{fig:can}} 
+\textbf{Figure \ref{fig:can}} shows two components. the top component is the CAN tranceiver. This IC effectively takes CAN's differential signal and turns it into digital logic levels and vise-versa. TXD and RXD are the digital transmit and digital receive pins. Rs pulled to ground sets the IC into high-speed mode which is required for some cars that use bit-rates of 500 kbps or higher. Finally two low-pass filters with a cutoff of 18MHz are added to suppress any transient noise from the CAN bus. The highest operating speed for the CAN protocol is 1 Mbps so the filter will effectively only eliminate high frequency noise. The second portion of the figure is the circuitry for the ISO 9141-2 and ISO 14230 protocols. The transmitter circuitry is simply an inverter that is being level shifted for both the K and L lines. The receiver is a simple comparator on the receiving line.
 
 \begin{figure}[H]
 \centering
