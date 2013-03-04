@@ -139,12 +139,21 @@ Another problematic area in regard to the hardware design was the mixed signal c
 Functionally no design changes have been needed since the project proposal?
 
 \section{Results}
-So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and test the CAN transceiver. \\
+In terms of part purchases the team currently has almost all the components to complete a first build. The only missing components are an OBD-cable, a fuse holder, and the transient voltag suppressors. All of these components will only be used in the final few steps of the build and as such are of negligable importance for project progress at this point in time. \\
+
+So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and some what test the CAN transceiver. Below are photos of the circuits build so far. The lower left corner of the breadboard contains the Bluetooth module and above that is the level shifter required to interface with the microcontroller. Directly left of the Bluetooth module is the CAN transceiver with takes a differetial voltage signal and converts it to logic levels. \\
 
 ADD PHOTOS HERE.
 
 \section{Verification}
 \subsubsection{Hardware}
+The verification procedures are divided among a few different phases. The first phase involves basic unit testing of a component, which is itself a piece of the entire hardware design. This basic unit testing is used mostly to examine voltage levels to verify proper operation. \\
+
+The next step of the verification process involves bench-top testing. This step involves "faking" input signals to the component to test the function of a particular component. This way it is possible to verify that not only does the component properly function but it is working accordingly. \\
+
+The next step is to test the limits of the device to ensure that the device is immune to the environments seen in a car and to test that the device will be reliable under stress. This step is optional depending ont the components being tested. \\
+
+The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual envirnoment they in which they are meant to be used.
 
 \subsubsection{Software}
 
