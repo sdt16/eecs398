@@ -1,0 +1,103 @@
+0,PIDs supported,Blk1 PIDs,,,,Bit
+1,Number of trouble codes and I/M info,No.DTC,,,,Bit
+2,Freeze frame trouble code,FF DTC,,,,Bit
+3,Fuel system status,Fuel Stat,,,,Bit
+4,Calculated engine load value,Load,%,0,100,A*100/255
+5,Engine coolant temperature,Eng Temp,C,-40,215,A-40
+6,Short term fuel trim-Bank 1,STFT1,%,-100,99.22,0.7812 * (A-128)
+7,Long term fuel trim-Bank 1,LTFT1,1%,-100,99.22,0.7812 * (A-128)
+8,Short term fuel trim-Bank 2,STFT2,%,-100,99.22,0.7812 * (A-128)
+9,Long term fuel trim-Bank 2,LTFT2,%,-100,99.22,0.7812 * (A-128)
+0A,Fuel pressure,Fuel Pres,kPa,0,765,A*3
+0B,Intake manifold pressure,Man Pres,kPa,0,255,A
+0C,Engine RPM,rpm,RPM,0,16383.75,((A*256)+B)/4
+0D,Vehicle speed,Speed,km/h,0,255,A
+0E,Timing advance,Time Adv,,-64,63.5,A/2 - 64
+0F,Intake air temperature,Inlet temp,C,-40,215,A-40
+10,MAF air flow rate,MAF,g/s,0,655.35,((256*A)+B) / 100
+11,Throttle position,T Pos,%,0,100,A*100/255
+12,Secondary air status,2 Air Stat,,,,Bit
+13,Oxygen sensors present,O2 loc,,,,Bit
+14,Bank 1 Sensor 1:Oxygen sensor voltage,O2(1-1)V,Volts,0,1.275,A * 0.005
+14,Bank 1 Sensor 1:Short term fuel trim,O2(1-1)STFT,%,0,99.2,(B-128) * 0.7812
+15,Bank 1 Sensor 2:Oxygen sensor voltage,O2(1-2)V,Volts,0,1.275,A * 0.005
+15,Bank 1 Sensor 2:Short term fuel trim,O2(1-2)STFT,%,0,99.2,(B-128) * 0.7812
+16,Bank 1 Sensor 3:Oxygen sensor voltage,O2(1-3)V,Volts,0,1.275,A * 0.005
+16,Bank 1 Sensor 3:Short term fuel trim,O2(1-3)STFT,%,0,99.2,(B-128) * 0.7812
+17,Bank 1 Sensor 4:Oxygen sensor voltage,O2(1-4)V,Volts,0,1.275,A * 0.005
+17,Bank 1 Sensor 4:Short term fuel trim,O2(1-4)STFT,%,0,99.2,(B-128) * 0.7812
+18,Bank 2 Sensor 1:Oxygen sensor voltage,O2(2-1)V,Volts,0,1.275,A * 0.005
+18,Bank 2 Sensor 1:Short term fuel trim,O2(2-1)STFT,%,0,99.2,(B-128) * 0.7812
+19,Bank 2 Sensor 2:Oxygen sensor voltage,O2(2-2)V,Volts,0,1.275,A * 0.005
+19,Bank 2 Sensor 2:Short term fuel trim,O2(2-2)STFT,%,0,99.2,(B-128) * 0.7812
+1A,Bank 2 Sensor 3:Oxygen sensor voltage,O2(21-3)V,Volts,0,1.275,A * 0.005
+1A,Bank 2 Sensor 3:Short term fuel trim,O2(2-3)STFT,%,0,99.2,(B-128) * 0.7812
+1B,Bank 2 Sensor 4:Oxygen sensor voltage,O2(2-4)V,Volts,0,1.275,A * 0.005
+1B,Bank 2 Sensor 4:Short term fuel trim,O2(2-4)STFT,%,0,99.2,(B-128) * 0.7812
+1C,OBD standards this vehicle conforms to,OBD Std,,,,Bit
+1D,Oxygen sensors present,O2 loc,,,,BIT
+1E,Auxiliary input status,PTO Stat,,,,Bit
+1F,Run time since engine start,seconds,Run Time,0,65535,(A*256)+B
+20,PIDs supported 21-40,Blk2 PIDs,,,,Bit
+21,Distance traveled with MIL on,Dist MIL on,km,0,65535,(A*256)+B
+22,Fuel Rail Pressure,Fuel Rail,kPa,0,5177.27,((A*256)+B) * 0.079
+23,Fuel Rail Pressure (diesel),D Fuel Rail,kPa,0,655350,((A*256)+B) * 10
+24,O2 1 lambda,?(1),,,0,2,((A*256)+B)*0.0000305
+24,O2 1 Voltage,O2(1)V,V,0,8,((C*256)+D)*0.000122
+25,O2 2 lambda,?(2),,0,2,((A*256)+B)*0.0000305
+25,O2 2 Voltage,O2(2)V,V,0,8,((C*256)+D)*0.000122
+26,O2 3 lambda,?(3),,0,2,((A*256)+B)*0.0000305
+26,O2 3 Voltage,O2(3)V,V,0,8,((C*256)+D)*0.000122
+27,O2 4 lambda,?(4),,0,2,((A*256)+B)*0.0000305
+27,O2 4 Voltage,O2(4)V,V,0,8,((C*256)+D)*0.000122
+28,O2 5 lambda,?(5),,0,2,((A*256)+B)*0.0000305
+28,O2 5 Voltage,O2(5)V,V,0,8,((C*256)+D)*0.000122
+29,O2 6 lambda,?(6),,0,2,((A*256)+B)*0.0000305
+29,O2 6 Voltage,O2(6)V,V,0,8,((C*256)+D)*0.000122
+2A,O2 7 lambda,?(7),,0,2,((A*256)+B)*0.0000305
+2A,O2 7 Voltage,O2(7)V,V,0,8,((C*256)+D)*0.000122
+2B,O2 8 lambda,?(8),,0,2,((A*256)+B)*0.0000305
+2B,O2 8 Voltage,O2(8)V,V,0,8,((C*256)+D)*0.000122
+2C,Commanded EGR,Cmd EGR,%,0,100,100*A/255
+2D,EGR Error,EGR Err,%,-100,99.22,A*0.78125 - 100
+2E,Commanded evaporative purge,Cmd Evap,%,0,100,100*A/255
+2F,Fuel Level Input,Fuel Lev,%,0,100,100*A/255
+30,Warm-ups since codes cleared,Cyc DTC Clr,,0,255,A
+31,Distance since codes cleared,Dist DTC Clr,km,0,65535,(A*256)+B
+32,Evap. System Vapor Pressure,Pa,Evap Pres,-8192,8192,((A*256)+B)/4 - 8192
+33,Barometric pressure,Atm Pres,kPa,0,255,A
+34,O2 1 lambda,?(1),,0,2,((A*256)+B)*0.0000305
+34,O2 1 Current,O2(1)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+35,O2 2 lambda,?(2),,0,2,((A*256)+B)*0.0000305
+35,O2 2 Current,O2(2)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+36,O2 3 lambda,?(3),,0,2,((A*256)+B)*0.0000305
+36,O2 3 Current,O2(3)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+37,O2 4 lambda,?(4),,0,2,((A*256)+B)*0.0000305
+37,O2 4 Current,O2(41)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+38,O2 5 lambda,?(5),,0,2,((A*256)+B)*0.0000305
+38,O2 5 Current,O2(5)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+39,O2 6 lambda,?(6),,0,2,((A*256)+B)*0.0000305
+39,O2 6 Current,O2(6)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+3A,O2 7 lambda,?(7),,0,2,((A*256)+B)*0.0000305
+3A,O2 7 Current,O2(7)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+3B,O2 8 lambda,?(8),,0,2,((A*256)+B)*0.0000305
+3B,O2 8 Current,O2(81)mA,mA,-128,128,((C*256)+D)*0.00391 - 128
+3C,Cat. temp. Bank 1 Sensor 1,Cat Tmp(1-1),C,-40,6513.5,((A*256)+B)/10 -40
+3D,Cat. temp. Bank 1 Sensor 2,Cat Tmp(1-2),C,-40,6513.5,((A*256)+B)/10 -40
+3E,Cat. temp. Bank 2 Sensor 1,Cat Tmp(2-1),C,-40,6513.5,((A*256)+B)/10 -40
+3F,Cat. temp. Bank 2 Sensor 2,Cat Tmp(2-2),C,-40,6513.5,((A*256)+B)/10 -40
+40,PIDs supported 41-60 (?),Blk3 PIDs,,,,Bit
+41,Monitor status this drive cycle,Mon Stat,?,?,?,?
+42,Control module voltage,Ctrl Mod V,V,0,65.54,((A*256)+B)/1000
+43,Absolute load value,Abs Load,%,0,25696,((A*256)+B)*100/255
+44,Command equivalence ratio,Cmd Equiv,,0,2,((A*256)+B)*0.0000305
+45,Relative throttle position,Rel T Pos,%,0,100,A*100/255
+46,Ambient air temperature,Amb Tmp,C,-40,215,A-40
+47,Absolute throttle position B,TP B,%,0,100,A*100/255
+48,Absolute throttle position C,TP C,%,0,100,A*100/255
+49,Accelerator pedal position D,TP D,%,0,100,A*100/255
+4A,Accelerator pedal position E,TP E,%,0,100,A*100/255
+4B,Accelerator pedal position F,TP F,%,0,100,A*100/255
+4C,Commanded throttle actuator,Cmd T Act,%,0,100,A*100/255
+4D,Time run with MIL on,Run Time MIL,minutes,0,65535,(A*256)+B
+4E,Time since trouble codes cleared,Time DTC Clr,minutes,0,65535,(A*256)+B

@@ -8,5 +8,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="pick_bt_device">Pick the OBD bluetooth device</string>
+    <string name="menu_get_codes">Get Codes</string>
 
 </resources>
