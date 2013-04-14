@@ -89,7 +89,7 @@ public class ELMProtocolHandler implements Runnable {
 
 	protected boolean waitForOk() {
 		Log.d(TAG, "Waiting for OK");
-		if (waitForString(OK + LT /* + LT */+ PROMPT) != null) {
+		if (waitForString(OK + LT + LT + PROMPT) != null) {
 			return true;
 		} else {
 			return false;
@@ -101,16 +101,19 @@ public class ELMProtocolHandler implements Runnable {
 		final Date firstTime = new Date();
 		Date currentTime = new Date();
 		while (true) { //currentTime.getTime() < (firstTime.getTime() + TIMEOUT_DELAY)) {
+			Log.i(TAG, "Waiting for string: " + str + " Got: " + rxData);
 			if (rxData.contains(BUS_INIT + LT)) {
 				rxData = rxData.substring(rxData.indexOf(BUS_INIT + LT)
 						+ BUS_INIT.length() + LT.length());
 			}
 			for (int i = 0; i < ERROR_MSGS.length; i++) {
-				if (rxData.contains(ERROR_MSGS[i] + LT /* + LT */+ PROMPT)) {
+				if (rxData.contains(ERROR_MSGS[i] + LT + LT + PROMPT)) {
+					Log.e(TAG, "Error Msg rx: " + rxData);
+					final String oldRx = rxData;
 					rxData = rxData.substring(rxData.indexOf(ERROR_MSGS[i])
 							+ ERROR_MSGS[i].length()
-							+ ((/* 2 * */LT.length()) + PROMPT.length()));
-					return null;
+							+ ((2 * LT.length()) + PROMPT.length()));
+					throw new ErrorMessageException(oldRx);
 				}
 			}
 			if (rxData.contains(str)) {
