@@ -65,7 +65,8 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<ArrayList<String>>> {
 					codeStrings.add("No Data");
 				} else {
 					final DTC code = obdHandler.dtcCollection.get(i);
-					codeStrings.add(code.codeAsString());
+					codeStrings.add(code.codeAsString() + " "
+							+ code.description());
 				}
 			}
 		}

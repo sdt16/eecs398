@@ -35,12 +35,6 @@ public class MainActivity extends FragmentActivity {
 
 	private static final String TAG = "MainActivity";
 
-	/**
-	 * The serialization (saved instance state) Bundle key representing the
-	 * current tab position.
-	 */
-	private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
-
 	private static final String STATE_BLUETOOTH_DEVICE_PICKED = "bt_device_picked";
 	private static final String STATE_DOWNLOADED_CODES = "downloaded_codes";
 
@@ -66,19 +60,7 @@ public class MainActivity extends FragmentActivity {
 		// Set up the action bar to show tabs.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
-
 		setProgressBarIndeterminateVisibility(true);
-
-		/*
-		 * // For each of the sections in the app, add a tab to the action bar.
-		 * actionBar.addTab(actionBar.newTab().setText(R.string.title_section1).
-		 * setTabListener(this));
-		 * actionBar.addTab(actionBar.newTab().setText(R.string
-		 * .title_section2).setTabListener(this));
-		 * actionBar.addTab(actionBar.newTab
-		 * ().setText(R.string.title_section3).setTabListener(this));
-		 */
 
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (btAdapter == null) {
@@ -228,10 +210,19 @@ public class MainActivity extends FragmentActivity {
 
 	private void getCodes() {
 		try {
-			final ELMProtocolHandler elm = new ELMProtocolHandler(btSocket.getInputStream(),
-					btSocket.getOutputStream());
-			final GetCodesAsyncTask task = new GetCodesAsyncTask(this);
-			task.execute(new ELMProtocolHandler[] { elm });
+			if (btSocket != null) {
+				final ELMProtocolHandler elm = new ELMProtocolHandler(
+						btSocket.getInputStream(), btSocket.getOutputStream());
+				final GetCodesAsyncTask task = new GetCodesAsyncTask(this);
+				task.execute(new ELMProtocolHandler[] { elm });
+			} else {
+				final AlertDialog.Builder builder = new AlertDialog.Builder(
+						this);
+				builder.setTitle(R.string.Error);
+				builder.setMessage(R.string.connect_to_bt_first);
+				builder.setPositiveButton("OK", null);
+				builder.show();
+			}
 		} catch (final IOException e) {
 			Log.e(TAG, "Error init BT socket", e);
 			makeErrorDialog(e);

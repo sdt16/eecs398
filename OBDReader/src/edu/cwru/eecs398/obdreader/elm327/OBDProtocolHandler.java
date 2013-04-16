@@ -149,7 +149,8 @@ public class OBDProtocolHandler {
 				elm.sendOBDC(MODE_SHW_CUR, PID_REQ_DTC_STATUS), MODE_SHW_CUR,
 				PID_REQ_DTC_STATUS);
 		if (trouble_code_status.equals("")) {
-			return null;
+			Log.e(TAG, "Trouble code status was empty");
+			throw new ErrorMessageException("Trouble code status was empty");
 		}
 		dat = new DTCandTestData(codeCount(trouble_code_status));
 		dat.mil = mil(trouble_code_status);
@@ -244,12 +245,16 @@ public class OBDProtocolHandler {
 		return vi;
 	}
 
-	private int codeCount(final String tcs) {
+	private int codeCount(String tcs) {
+		tcs = checkForDoubleCode(tcs);
 		int count;
 		int val = 0;
 
 		if (tcs.length() >= 2) {
 			val = hexStringToInt(tcs.substring(0, 2));
+		}
+		if ((val == 0) && (tcs.length() > 15)) {
+			val = hexStringToInt(tcs.substring(12, 14));
 		}
 		if (val > 128) {
 			count = val - 128;
@@ -302,6 +307,7 @@ public class OBDProtocolHandler {
 	}
 
 	private int doubleHexStringToInt(String str) {
+		str = checkForDoubleCode(str);
 		int idx = 0;
 		int val = 0;
 		int retVal = 0;
@@ -325,6 +331,14 @@ public class OBDProtocolHandler {
 			}
 		}
 		return retVal;
+	}
+
+	private String checkForDoubleCode(String str) {
+		int idxSpaces;
+		if ((idxSpaces = str.indexOf("  ")) != -1) {
+			str = str.substring(idxSpaces + 2);
+		}
+		return str;
 	}
 
 	private String findCodeStatus(String obdcVal, final String responseId) {
@@ -363,8 +377,8 @@ public class OBDProtocolHandler {
 			response = response.substring(elm.LT.length());
 		}
 		idx = response.indexOf(responseId);
-		if (idx == 0) {
-			data = response.substring(responseId.length() + 1);
+		if (idx < 15) {
+			data = response.substring(responseId.length() + 1 + idx);
 			while (data.indexOf(elm.LT + responseId) != -1) {
 				data = data.replace(elm.LT + responseId, "");
 			}

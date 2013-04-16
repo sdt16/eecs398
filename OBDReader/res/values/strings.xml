@@ -12,5 +12,7 @@
     <string name="bluetooth_connected">Bluetooth connected, ready to download codes</string>
     <string name="bluetooth_not_connected">Bluetooth is not connected, try to connect again</string>
     <string name="menu_connect_bt">Connect to Bluetooth device</string>
+    <string name="Error">Error</string>
+    <string name="connect_to_bt_first">You must connect to a Bluetooth device first</string>
 
 </resources>

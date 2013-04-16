@@ -209,7 +209,8 @@ public class ELMProtocolHandler implements Runnable {
 		String obdcReq = "";
 		obdcReq = pad(mode) + pad(pid);
 		send(obdcReq);
-		return waitForString(LT + PROMPT);
+		final String ltPrompt = LT + PROMPT;
+		return waitForString(ltPrompt);
 	}
 
 	protected synchronized String sendOBDC(final byte mode) {
