@@ -15,7 +15,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -27,9 +29,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import edu.cwru.eecs398.obdreader.elm327.DTC;
+import edu.cwru.eecs398.obdreader.elm327.DTCandTestData;
 import edu.cwru.eecs398.obdreader.elm327.ELMProtocolHandler;
+import edu.cwru.eecs398.obdreader.elm327.OBDProtocolHandler;
 
 public class MainActivity extends FragmentActivity {
 
@@ -46,9 +52,12 @@ public class MainActivity extends FragmentActivity {
 	private BluetoothAdapter btAdapter;
 	protected BluetoothSocket btSocket;
 
+	private ELMProtocolHandler elm;
+
 	private Boolean pickedDevice = false;
 
-	private ArrayList<String> dtcCodes;
+	private DTCandTestData dtcCodes;
+	private OBDProtocolHandler obdHandler;
 
 
 	@Override
@@ -73,6 +82,13 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		setProgressBarIndeterminateVisibility(false);
+		obdHandler = new OBDProtocolHandler(this, elm);
+	}
+
+	@Override
+	public void onConfigurationChanged(final Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		setupFragmentDisplay();
 	}
 
 	@Override
@@ -83,15 +99,44 @@ public class MainActivity extends FragmentActivity {
 
 	private void setupFragmentDisplay() {
 		final Bundle args = new Bundle();
-		args.putStringArrayList(DummySectionFragment.ARG_CODES, dtcCodes);
-		args.putBoolean(DummySectionFragment.ARG_BT_CONNECTED,
-				btSocket != null ? true : false);
+		final ArrayList<String> codeStrings = new ArrayList<String>();
+
+		if ((dtcCodes != null) && (dtcCodes.storedCodes != null)) {
+			for (final int i : dtcCodes.storedCodes) {
+				if (i == 0) {
+					// codeStrings.add("No Data");
+				} else {
+					final DTC code = obdHandler.dtcCollection.get(i);
+					if (code != null) {
+						codeStrings.add(code.codeAsString() + " "
+								+ code.description());
+					}
+				}
+			}
+			args.putStringArrayList(DummySectionFragment.ARG_CODES, codeStrings);
+		}
+
+		if (dtcCodes != null) {
+			args.putBoolean(DummySectionFragment.ARG_MIL, dtcCodes.mil);
+		}
+		final boolean btSockNull = btSocket != null ? true : false;
+		args.putBoolean(DummySectionFragment.ARG_BT_CONNECTED, btSockNull);
 		final FragmentManager fragmentManager = getFragmentManager();
+
 		final FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 		final Fragment fragment = new DummySectionFragment();
 		fragment.setArguments(args);
-		fragmentTransaction.replace(R.id.mainLayout, fragment);
+		if (dtcCodes == null) {
+			fragmentTransaction.replace(R.id.infoTextLayout, fragment);
+			final LinearLayout layout = (LinearLayout) findViewById(R.id.infoTextLayout);
+			layout.setVisibility(View.VISIBLE);
+		} else {
+			fragmentTransaction.replace(R.id.codesLayout, fragment);
+			final LinearLayout layout = (LinearLayout) findViewById(R.id.codesLayout);
+			layout.setVisibility(View.VISIBLE);
+		}
+
 		fragmentTransaction.commit();
 	}
 
@@ -160,6 +205,14 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 		btSocket = socket;
+		try {
+			elm = new ELMProtocolHandler(
+					btSocket.getInputStream(), btSocket.getOutputStream());
+			elm.start();
+		} catch (final IOException e) {
+			Log.e(TAG, "Error init BT socket", e);
+			makeErrorDialog(e);
+		}
 		setupFragmentDisplay();
 	}
 
@@ -177,7 +230,7 @@ public class MainActivity extends FragmentActivity {
 		setupFragmentDisplay();
 	}
 
-	public void setObdCodes(final ArrayList<String> codes) {
+	public void setObdCodes(final DTCandTestData codes) {
 		dtcCodes = codes;
 		setupFragmentDisplay();
 	}
@@ -191,13 +244,13 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onRestoreInstanceState(final Bundle savedInstanceState) {
 		pickedDevice = savedInstanceState.getBoolean(STATE_BLUETOOTH_DEVICE_PICKED);
-		dtcCodes = savedInstanceState
-				.getStringArrayList(STATE_DOWNLOADED_CODES);
+		dtcCodes = (DTCandTestData) savedInstanceState
+				.getSerializable(STATE_DOWNLOADED_CODES);
 	}
 
 	@Override
 	public void onSaveInstanceState(final Bundle outState) {
-		outState.putStringArrayList(STATE_DOWNLOADED_CODES, dtcCodes);
+		outState.putSerializable(STATE_DOWNLOADED_CODES, dtcCodes);
 		outState.putBoolean(STATE_BLUETOOTH_DEVICE_PICKED, pickedDevice);
 	}
 
@@ -209,23 +262,43 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void getCodes() {
-		try {
-			if (btSocket != null) {
-				final ELMProtocolHandler elm = new ELMProtocolHandler(
-						btSocket.getInputStream(), btSocket.getOutputStream());
-				final GetCodesAsyncTask task = new GetCodesAsyncTask(this);
-				task.execute(new ELMProtocolHandler[] { elm });
-			} else {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(
-						this);
-				builder.setTitle(R.string.Error);
-				builder.setMessage(R.string.connect_to_bt_first);
-				builder.setPositiveButton("OK", null);
-				builder.show();
-			}
-		} catch (final IOException e) {
-			Log.e(TAG, "Error init BT socket", e);
-			makeErrorDialog(e);
+		if (btSocket != null) {
+			final GetCodesAsyncTask task = new GetCodesAsyncTask(this);
+			// Thread.sleep(2000);
+			task.execute(new ELMProtocolHandler[] { elm });
+		} else {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(
+					this);
+			builder.setTitle(R.string.Error);
+			builder.setMessage(R.string.connect_to_bt_first);
+			builder.setPositiveButton("OK", null);
+			builder.show();
+		}
+	}
+
+	private void clearCodes() {
+		if (btSocket != null) {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.clear_codes_dialog);
+			builder.setMessage(R.string.clear_codes_message);
+			final ClearCodesAsyncTask clearCodesTask = new ClearCodesAsyncTask(
+					this);
+			builder.setPositiveButton("OK", new OnClickListener() {
+
+				@Override
+				public void onClick(final DialogInterface dialog,
+						final int which) {
+					clearCodesTask.execute(new ELMProtocolHandler[] { elm });
+				}
+			});
+			builder.setNegativeButton("Cancel", null);
+			builder.show();
+		} else {
+			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.Error);
+			builder.setMessage(R.string.connect_to_bt_first);
+			builder.setPositiveButton("OK", null);
+			builder.show();
 		}
 	}
 
@@ -237,6 +310,9 @@ public class MainActivity extends FragmentActivity {
 			return true;
 		case R.id.menu_bt_connect:
 			pickBtDevice();
+			return true;
+		case R.id.menu_clear_codes:
+			clearCodes();
 			return true;
 		default:
 			return false;
@@ -256,6 +332,7 @@ public class MainActivity extends FragmentActivity {
 		public static final String ARG_CODES = "codes";
 		public static final String ARG_STRING = "string";
 		public static final String ARG_BT_CONNECTED = "bt_connected";
+		public static final String ARG_MIL = "mil";
 
 		public DummySectionFragment() {
 		}
@@ -267,11 +344,13 @@ public class MainActivity extends FragmentActivity {
 			// number argument value.
 			final ArrayList<String> codes = getArguments().getStringArrayList(
 					ARG_CODES);
+			final boolean mil = getArguments().getBoolean(ARG_MIL);
 			final boolean btConnected = getArguments().getBoolean(ARG_BT_CONNECTED);
 			if (codes != null) {
 				final ListView listView = new ListView(getActivity());
 				final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 						getActivity(), android.R.layout.simple_list_item_1);
+				arrayAdapter.add("MIL Status: " + (mil ? "On" : "Off"));
 				arrayAdapter.addAll(codes);
 				listView.setAdapter(arrayAdapter);
 				return listView;

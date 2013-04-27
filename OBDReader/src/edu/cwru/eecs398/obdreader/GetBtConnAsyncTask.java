@@ -17,13 +17,15 @@ AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
 
 	private final MainActivity callingActivity;
 	private final LinearLayout layoutWithSpinner;
-	private final LinearLayout mainLayout;
+	private final LinearLayout infoTextLayout;
+	private final LinearLayout codesLayout;
 
 
 	public GetBtConnAsyncTask(final MainActivity ctx) {
 		layoutWithSpinner = (LinearLayout) ctx
 				.findViewById(R.id.layoutWithSpinner);
-		mainLayout = (LinearLayout) ctx.findViewById(R.id.mainLayout);
+		infoTextLayout = (LinearLayout) ctx.findViewById(R.id.infoTextLayout);
+		codesLayout = (LinearLayout) ctx.findViewById(R.id.codesLayout);
 		callingActivity = ctx;
 	}
 
@@ -31,7 +33,8 @@ AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		layoutWithSpinner.setVisibility(View.VISIBLE);
-		mainLayout.setVisibility(View.GONE);
+		infoTextLayout.setVisibility(View.GONE);
+		infoTextLayout.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -64,6 +67,6 @@ AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
 			callingActivity.setBluetoothSocketError(result.getError());
 		}
 		layoutWithSpinner.setVisibility(View.GONE);
-		mainLayout.setVisibility(View.VISIBLE);
+		// infoTextLayout.setVisibility(View.VISIBLE);
 	}
 }

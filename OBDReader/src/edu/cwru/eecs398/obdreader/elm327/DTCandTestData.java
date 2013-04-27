@@ -21,6 +21,12 @@
 
 package edu.cwru.eecs398.obdreader.elm327;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+
+import android.util.Log;
+
 /**
  * A class to hold data related to DTCs and Tests. An object of this class will
  * normally be populated by these requests<br>
@@ -32,7 +38,12 @@ package edu.cwru.eecs398.obdreader.elm327;
  * 
  * @author Tim Wootton <tim@tee-jay.demon.co.uk>
  */
-public class DTCandTestData {
+public class DTCandTestData implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public int totalCodes;
 
 	/**
@@ -164,6 +175,26 @@ public class DTCandTestData {
 		totalCodes = maxCodes;
 		storedCodes = new int[totalCodes];
 		pendingCodes = new int[totalCodes];
+	}
+
+	private void writeObject(final java.io.ObjectOutputStream out)
+			throws IOException {
+		out.writeObject(this);
+		out.close();
+	}
+
+	private void readObject(final java.io.ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+		final DTCandTestData obj = (DTCandTestData) in.readObject();
+		for (final Field f : DTCandTestData.class.getDeclaredFields()) {
+			try {
+				f.set(this, f.get(obj));
+			} catch (final IllegalArgumentException e) {
+				Log.e("DTCandTestData", "Error deserializing", e);
+			} catch (final IllegalAccessException e) {
+				Log.e("DTCandTestData", "Error deserializing", e);
+			}
+		}
 	}
 
 }

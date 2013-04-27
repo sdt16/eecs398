@@ -333,12 +333,27 @@ public class OBDProtocolHandler {
 		return retVal;
 	}
 
-	private String checkForDoubleCode(String str) {
-		int idxSpaces;
-		if ((idxSpaces = str.indexOf("  ")) != -1) {
-			str = str.substring(idxSpaces + 2);
+	private String checkForDoubleCode(final String str) {
+		if (str.indexOf("  ") != -1) {
+			final String[] split = str.split("  ", 2);
+			if (countChars(split[0].toCharArray(), '0') > countChars(
+					split[1].toCharArray(), '0')) {
+				return split[1];
+			} else {
+				return split[0];
+			}
 		}
 		return str;
+	}
+
+	private int countChars(final char[] chars, final char charToCount) {
+		int count = 0;
+		for (final char curr : chars) {
+			if (curr == charToCount) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	private String findCodeStatus(String obdcVal, final String responseId) {

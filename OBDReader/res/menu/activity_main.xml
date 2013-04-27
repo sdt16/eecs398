@@ -1,5 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/menu_get_codes" android:title="@string/menu_get_codes"></item>
+    <item android:id="@+id/menu_clear_codes" android:title="@string/menu_clear_codes"></item>
     <item android:id="@+id/menu_bt_connect" android:title="@string/menu_connect_bt"></item>
-
 </menu>

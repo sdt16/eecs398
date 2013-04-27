@@ -21,10 +21,18 @@
 	</LinearLayout>
 	
     <LinearLayout
-        android:id="@+id/mainLayout"
+        android:id="@+id/infoTextLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" />
+    
+    <LinearLayout
+        android:id="@+id/codesLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top"
         android:orientation="vertical"
         android:visibility="gone" />
 </FrameLayout>

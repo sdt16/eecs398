@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.util.Log;
 
@@ -18,41 +20,56 @@ import android.util.Log;
  * @author schuyler
  * 
  */
-public class ELMProtocolHandler implements Runnable {
+public class ELMProtocolHandler extends Thread {
 	private static final String TAG = "OBDProtocolHandler";
 
 	protected static final String PROMPT = ">";
 	protected static final String OK = "OK";
 	private static final String BUS_INIT = "BUS INIT: ...";
+	private static final String NO_DATA = "NO DATA";
 	private static final String[] ERROR_MSGS = { "BUFFER FULL", "BUS BUSY",
 		"BUS ERROR", "CAN ERROR", "FB ERROR", "DATA ERROR", "<DATA ERROR",
-		"NO DATA", "<RX ERROR", "UNABLE TO CONNECT", "?" };
+		"<RX ERROR", "UNABLE TO CONNECT", "?" };
 
 	private final InputStream in;
 	private final OutputStream out;
 	private String rxData = "";
 	protected String LT = "\r\n";
 
-	private static final int TIMEOUT_DELAY = 3000;
+	private final Lock mutex = new ReentrantLock(true);
 
-	private class UpdateRxData extends Thread {
+	private static final int TIMEOUT_DELAY = 10000;
 
-		@Override
-		public void run() {
-			final byte[] readBuffer = new byte[256];
+	public void flush() {
+		final byte[] readBuffer = new byte[256];
 
-			try {
-				while (true) {
-					while (in.available() > 0) {
-						final int numBytes = in.read(readBuffer);
+		try {
+			if (in.available() > 0) {
+				in.read(readBuffer);
+				Log.i(TAG, "Read during flush: " + new String(readBuffer));
+			}
+		} catch (final IOException e) {
+			// ignore, just want to flush out the buffer.
+		}
+		rxData = "";
+	}
+
+	@Override
+	public void run() {
+		final byte[] readBuffer = new byte[256];
+		try {
+			while (!Thread.interrupted()) {
+				while (in.available() > 0) {
+					final int numBytes = in.read(readBuffer);
+					synchronized (mutex) {
 						rxData = rxData + new String(readBuffer, 0, numBytes);
 					}
 				}
-			} catch (final IOException e) {
-				Log.e(TAG, "Error reading from InputStream", e);
 			}
+		} catch (final IOException e) {
+			Log.e(TAG, "Error reading from InputStream", e);
 		}
-	};
+	}
 
 	public ELMProtocolHandler(final InputStream in, final OutputStream out) {
 		this.in = in;
@@ -87,6 +104,15 @@ public class ELMProtocolHandler implements Runnable {
 		}
 	}
 
+	private boolean waitForResetPrompt() {
+		Log.d(TAG, "Waiting for reset prompt");
+		if (waitForString(PROMPT) != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	protected boolean waitForOk() {
 		Log.d(TAG, "Waiting for OK");
 		if (waitForString(OK + LT + LT + PROMPT) != null) {
@@ -100,26 +126,36 @@ public class ELMProtocolHandler implements Runnable {
 		final String preString;
 		final Date firstTime = new Date();
 		Date currentTime = new Date();
-		while (true) { //currentTime.getTime() < (firstTime.getTime() + TIMEOUT_DELAY)) {
-			Log.i(TAG, "Waiting for string: " + str + " Got: " + rxData);
-			if (rxData.contains(BUS_INIT + LT)) {
-				rxData = rxData.substring(rxData.indexOf(BUS_INIT + LT)
-						+ BUS_INIT.length() + LT.length());
-			}
-			for (int i = 0; i < ERROR_MSGS.length; i++) {
-				if (rxData.contains(ERROR_MSGS[i] + LT + LT + PROMPT)) {
-					Log.e(TAG, "Error Msg rx: " + rxData);
-					final String oldRx = rxData;
-					rxData = rxData.substring(rxData.indexOf(ERROR_MSGS[i])
-							+ ERROR_MSGS[i].length()
-							+ ((2 * LT.length()) + PROMPT.length()));
-					throw new ErrorMessageException(oldRx);
+		while (currentTime.getTime() < (firstTime.getTime() + TIMEOUT_DELAY)) {
+			synchronized (mutex) {
+				Log.i(TAG, "Waiting for string: " + str + " Got: " + rxData);
+				if (rxData.contains(BUS_INIT + LT)) {
+					rxData = rxData.substring(rxData.indexOf(BUS_INIT + LT)
+							+ BUS_INIT.length() + LT.length());
 				}
-			}
-			if (rxData.contains(str)) {
-				preString = rxData.substring(0, rxData.indexOf(str));
-				rxData = rxData.substring(rxData.indexOf(str) + str.length());
-				return preString;
+				if (rxData.contains(NO_DATA + LT + LT + PROMPT)) {
+					Log.e(TAG, "No data rx: " + rxData);
+					final String oldRx = rxData;
+					rxData = rxData.substring(rxData.indexOf(NO_DATA)
+							+ NO_DATA.length()
+							+ ((2 * LT.length()) + PROMPT.length()));
+					return NO_DATA;
+				}
+				for (int i = 0; i < ERROR_MSGS.length; i++) {
+					if (rxData.contains(ERROR_MSGS[i]/* + LT + LT + PROMPT */)) {
+						Log.e(TAG, "Error Msg rx: " + rxData);
+						final String oldRx = rxData;
+						rxData = rxData.substring(rxData.indexOf(ERROR_MSGS[i])
+								+ ERROR_MSGS[i].length()
+								/* + ((2 * LT.length()) + PROMPT.length()) */);
+						throw new ErrorMessageException(oldRx);
+					}
+				}
+				if (rxData.contains(str)) {
+					preString = rxData.substring(0, rxData.indexOf(str));
+					rxData = rxData.substring(rxData.indexOf(str) + str.length());
+					return preString;
+				}
 			}
 			try {
 				Thread.sleep(200);
@@ -127,7 +163,7 @@ public class ELMProtocolHandler implements Runnable {
 			}
 			currentTime = new Date();
 		}
-		//return null;
+		return null;
 	}
 
 	// General AT Commands
@@ -172,7 +208,7 @@ public class ELMProtocolHandler implements Runnable {
 	public synchronized boolean reset() {
 		Log.d(TAG, "Sending reset");
 		sendAt("z");
-		return waitForPrompt();
+		return waitForResetPrompt();
 	}
 
 	public synchronized boolean warmStart() {
@@ -186,23 +222,27 @@ public class ELMProtocolHandler implements Runnable {
 	}
 
 	public boolean send(final String msg) {
-		rxData = "";
-		if (out == null) {
-			return false;
-		}
-
-		Log.d(TAG, "tx: " + msg);
-		try {
-			for (int i = 0; i < msg.length(); i++) {
-				final char ch = msg.charAt(i);
-				out.write(ch);
+		synchronized (mutex) {
+			rxData = "";
+			if (out == null) {
+				return false;
 			}
-			out.write(0x0d);
-		} catch (final IOException e) {
-			Log.w(TAG, "IOException while sending msg to ELM", e);
-			return false;
+
+			Log.d(TAG, "tx: " + msg);
+			try {
+				final byte[] msgArray = msg.getBytes("US-ASCII");
+				/*
+				 * for (int i = 0; i < msg.length(); i++) { final char ch =
+				 * msg.charAt(i); out.write(ch); }
+				 */
+				out.write(msgArray);
+				out.write(0x0d);
+			} catch (final IOException e) {
+				Log.w(TAG, "IOException while sending msg to ELM", e);
+				return false;
+			}
+			return true;
 		}
-		return true;
 	}
 
 	protected synchronized String sendOBDC(final byte mode, final byte pid) {
@@ -210,7 +250,13 @@ public class ELMProtocolHandler implements Runnable {
 		obdcReq = pad(mode) + pad(pid);
 		send(obdcReq);
 		final String ltPrompt = LT + PROMPT;
-		return waitForString(ltPrompt);
+		final String ret = waitForString(ltPrompt);
+		if (NO_DATA.equals(ret)) {
+			final byte respConv = 0x40;
+			return (mode | respConv) + " " + pad(pid);
+		} else {
+			return ret;
+		}
 	}
 
 	protected synchronized String sendOBDC(final byte mode) {
@@ -230,6 +276,7 @@ public class ELMProtocolHandler implements Runnable {
 		return ret;
 	}
 
+	@Override
 	public void interrupt() {
 		try {
 			out.write('*');
@@ -251,10 +298,5 @@ public class ELMProtocolHandler implements Runnable {
 		return retVal;
 	}
 
-	@Override
-	public void run() {
-		final UpdateRxData update = new UpdateRxData();
-		update.start();
-	}
 
 }

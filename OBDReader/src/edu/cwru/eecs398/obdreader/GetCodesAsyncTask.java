@@ -1,29 +1,28 @@
 package edu.cwru.eecs398.obdreader;
 
-import java.util.ArrayList;
-
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-import edu.cwru.eecs398.obdreader.elm327.DTC;
 import edu.cwru.eecs398.obdreader.elm327.DTCandTestData;
 import edu.cwru.eecs398.obdreader.elm327.ELMProtocolHandler;
 import edu.cwru.eecs398.obdreader.elm327.ErrorMessageException;
 import edu.cwru.eecs398.obdreader.elm327.OBDProtocolHandler;
 
 public class GetCodesAsyncTask extends
-AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<ArrayList<String>>> {
+AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
 
 	private static final String TAG = "GetCodes";
 	private final MainActivity callingActivity;
 	private final LinearLayout layoutWithSpinner;
-	private final LinearLayout mainLayout;
+	private final LinearLayout infoTextLayout;
+	private final LinearLayout codesLayout;
 
 	public GetCodesAsyncTask(final MainActivity ctx) {
 		layoutWithSpinner = (LinearLayout) ctx
 				.findViewById(R.id.layoutWithSpinner);
-		mainLayout = (LinearLayout) ctx.findViewById(R.id.mainLayout);
+		infoTextLayout = (LinearLayout) ctx.findViewById(R.id.infoTextLayout);
+		codesLayout = (LinearLayout) ctx.findViewById(R.id.codesLayout);
 		callingActivity = ctx;
 	}
 
@@ -31,25 +30,26 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<ArrayList<String>>> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		layoutWithSpinner.setVisibility(View.VISIBLE);
-		mainLayout.setVisibility(View.GONE);
+		infoTextLayout.setVisibility(View.GONE);
+		codesLayout.setVisibility(View.GONE);
+
 	}
 
 	@Override
-	protected AsyncTaskResult<ArrayList<String>> doInBackground(
+	protected AsyncTaskResult<DTCandTestData> doInBackground(
 			final ELMProtocolHandler... arg0) {
-		final ArrayList<String> codeStrings = new ArrayList<String>();
 		OBDProtocolHandler obdHandler = null;
+		final ELMProtocolHandler elm = arg0[0];
 		try {
-			final ELMProtocolHandler elm = arg0[0];
-			elm.run();
+			elm.flush();
+			elm.reset();
 			elm.setLinefeed(true);
 			elm.setCommandEcho(false);
 			elm.sendAt("sp0");
-			obdHandler = new OBDProtocolHandler(
-					callingActivity, elm);
+			obdHandler = new OBDProtocolHandler(callingActivity, elm);
 		} catch (final Exception e) {
 			Log.e(TAG, "Generic error getting codes from car", e);
-			return new AsyncTaskResult<ArrayList<String>>(e);
+			return new AsyncTaskResult<DTCandTestData>(e);
 		}
 
 		DTCandTestData data = null;
@@ -57,31 +57,19 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<ArrayList<String>>> {
 			data = obdHandler.getDTCandTestData();
 		} catch (final ErrorMessageException e) {
 			Log.e(TAG, "Got an error message from the ELM", e);
-			return new AsyncTaskResult<ArrayList<String>>(e);
+			return new AsyncTaskResult<DTCandTestData>(e);
 		}
-		if (data.storedCodes != null) {
-			for (final int i : data.storedCodes) {
-				if (i == 0) {
-					codeStrings.add("No Data");
-				} else {
-					final DTC code = obdHandler.dtcCollection.get(i);
-					codeStrings.add(code.codeAsString() + " "
-							+ code.description());
-				}
-			}
-		}
-
-		return new AsyncTaskResult<ArrayList<String>>(codeStrings);
+		return new AsyncTaskResult<DTCandTestData>(data);
 	}
 
 	@Override
-	protected void onPostExecute(final AsyncTaskResult<ArrayList<String>> result) {
+	protected void onPostExecute(final AsyncTaskResult<DTCandTestData> result) {
 		if (result.getResult() != null) {
 			callingActivity.setObdCodes(result.getResult());
 		} else {
 			callingActivity.setObdCodesError(result.getError());
 		}
 		layoutWithSpinner.setVisibility(View.GONE);
-		mainLayout.setVisibility(View.VISIBLE);
+		// mainLayout.setVisibility(View.VISIBLE);
 	}
 }
