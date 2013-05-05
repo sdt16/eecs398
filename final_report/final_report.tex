@@ -128,7 +128,55 @@ This section doesn't describe any specific component of the system. This section
 The group is using a variety of design principles to accomplish this design that happen in stages. The first stage of the design was the research portion of the project. This amounted to essentially reading up on OBD-II standards as well as Android development documentation. Some research effort was also put into looking up the market outlook for such a product. After the research phase was the design phase. In this phase of the project the hardware was designed and the Android applications functionality was outlined. Both of these portions were designed to the specifications listed above in section 2 of this document. \\
 
 \subsubsection{Hardware}
-In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. 
+In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. \\
+
+The process for actually building the hardware was done in phases. When possible the team tried to divide modules into small units that could then be tested independent of the rest of the design. That way problem areas were kept as small as possible. Another advantage of using small units is to effectively allow for integration testing between the different components of the design. The formal steps taken to this approach are as follows:
+
+\begin{itemize}
+\item Build and then unit test the Bluetooth module
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/btinterface.png}
+\caption{Bluetooth Module}
+\label{fig:btinterface}
+\end{figure}
+
+\item Build then unit test the MCU
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/obdiiinterface.png}
+\caption{OBD-II Interface}
+\label{fig:odbinterface}
+\end{figure}
+
+\item Integration testing between the MCU and Bluetooth module
+
+\item Build then unit test a subset of the power supply
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/powersupply.png}
+\caption{Partially built power supply circuitry}
+\label{fig:powersupply1}
+\end{figure}
+
+\item Integration testing between power supply and device
+
+\item Build then unit test the 5 protocols required for OBD-II
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/canprotocol.png}
+\caption{CAN protocol}
+\label{fig:canprotocol}
+\end{figure}\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/kwp.png}
+\caption{Keyword2000 Protocol}
+\label{fig:kwprotocol}
+\end{figure}
+
+\item Build and unit test the remainder of the power supply
+\item Final integration testing and field testing
+\end{itemize}
 
 \subsubsection{Software}
 The software will be using the standard ELM327 OBD software protocol. This is a well supported serial protocol for communicating with OBD transceivers. This will allow the Android app to communicate with other ELM327 based OBD trancevers. The protocol serialization and deserialization is also well isolated in order to let us swap out a different command set if needed in the future without affecting the rest of the app. 
