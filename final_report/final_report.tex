@@ -11,7 +11,7 @@
 \normalsize Advisor: Swarup Bhunia, PhD
 }
 	
-\date{\normalsize March 4, 2013}
+\date{\normalsize May 7, 2013}
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{epstopdf}
@@ -24,7 +24,7 @@
 \maketitle
 
 \section*{Executive Summary}
-A user with an Android based phone can read and interpret diagnostic and operational data from their 1996 model year or newer car. This has been accomplished by having their Android device pair with a OBD (On-board Diagnostic) interface that is connected to the car over bluetooth, using a secure channel. 
+A user with an Android based phone can read and interpret diagnostic and operational data from their 1996 model year or newer car. This has been accomplished by having their Android device pair with a OBD (On-board Diagnostic) interface that is connected to the car over bluetooth, using a secure channel. OBD functionality is legislated for all US cars after 1996 this means that the requirements for the device outlined in this report are ubiqutious across most cars in the US today.
 
 \newpage
 
@@ -50,6 +50,8 @@ The ISO 9141-2 protocol is implemented as a local interconnect network (LIN). It
 
 \subsubsection{ISO 15765 CAN}
 The ISO 15765 specifies the physical and data-link layer for a controller area network (CAN). The protocol operates on a range of bit rates from 250 kbps to 1 Mbps. Bit arbitration is taken care of by CSMA/NDA and messages are passed along a bus to nodes in the network. By 2008 all light weight vehicles sold in the US must implement the CAN protocol. There are two types of data-link layers for the CAN protocol, regular and extended.
+
+\newpage
 
 \section{Project Specifications}
 This project has quite a few objectives because there are quite a few parts to it. This section will refer to Appendix I, a diagram which shows the information exchange, to clarify things.
@@ -113,7 +115,9 @@ This section doesn't describe any specific component of the system. This section
 	\item Will use ``Just Works" form of pairing.
 	\item The pairing key will be stored on the non-Android side of communication in the MCU.
 	\item Both devices must acknowledge the pairing request.
-\end{itemize}
+\end{itemize} 
+
+\newpage
 
 \section{Methodology}
 \subsection{Introduction}
@@ -124,7 +128,6 @@ In terms of hardware the design was largely constrained to fit to the OBD-II spe
 
 \subsubsection{Software}
 The software will be using the standard ELM327 OBD software protocol. This is a well supported serial protocol for communicating with OBD transceivers. This will allow the Android app to communicate with other ELM327 based OBD trancevers. The protocol serialization and deserialization is also well isolated in order to let us swap out a different command set if needed in the future without affecting the rest of the app. 
-
 
 The app is also using the standard Android built-in themes so it will be visually appealing. This makes it both easier to develop and potentially have higher sales because of the professional look. 
 
@@ -200,12 +203,16 @@ The only thing that was potentially considered at the very beginning of the proj
 \subsection{Design Changes}
 Functionally no design changes have been needed since the project proposal.
 
+\newpage
+
 \section{Results}
 In terms of part purchases the team currently has almost all the components to complete a first build. The only missing components are an OBD-cable, a fuse holder, and the transient voltag suppressors. All of these components will only be used in the final few steps of the build and as such are of negligable importance for project progress at this point in time. \\
 
 So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and some what test the CAN transceiver. Below are photos of the circuits build so far. The lower left corner of the breadboard contains the Bluetooth module and above that is the level shifter required to interface with the microcontroller. Directly left of the Bluetooth module is the CAN transceiver with takes a differetial voltage signal and converts it to logic levels. \\
 
 ADD PHOTOS HERE.
+
+\newpage
 
 \section{Verification}
 \subsubsection{Hardware}
@@ -220,8 +227,12 @@ The next steps are integration testing and in-car testing. Integration testing i
 \subsubsection{Software}
 It will be easy to verify that the correct data is flowing from the OBD side to the app because a serial console can be used to see the exact data going in and out. The app can be verified that the data is correct by looking at the serial console's output and comparing it to the data shown in the app. If it matches, the verification worked. The software simobd will also be used to simulate a generic ELM327 protocol device and can generate valid random data. This will allow us to test the app against data that might not be able to be replicated in the real world with the resources avalable. 
 
+\newpage
+
 \section{Administrative}
 \input{gantt_chart.tex}
+
+\newpage
 
 \section{Design Implications}
 \subsection{Budget}
@@ -263,6 +274,8 @@ The main health concerns with this device revolve around RF signals. However tha
 
 \subsubsection{Commercial/Societal Impact}
 This project will have most of it's impact in the enthusiast market. The project will be used by the enthusiast to get valuable information about their vehicle letting them know of any potential problems. It also will allow them to reset their codes if they do their own repair to their car. Repair shops will charge anywhere from \$75 to \$200 just to read the codes from the ECU. If they discover a code that is easily fixable, this scanner will pay for itself right there.
+
+\newpage
 
 \section{Discussion and Conclusions}
 The project is currently on schedule. The circuit design took slightly longer then expected, but the wireless communication over bluetooth was easier than expected. The net result is the project is still on schedule. This week the system should be commutating via CAN all the way to the bluetooth module. This will show up in the serial console and allow progress on the app to continue. 
