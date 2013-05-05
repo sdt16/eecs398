@@ -304,7 +304,44 @@ Figure \ref{fig: btconnected} shows the app as shown to the user when it is conn
 
 Figure \ref{fig: pickoption} shows what the user sees for avaliable actions to take. ``Get codes'' is the main function, and will tell the hardware to scan for codes. ``Connect to bluetooth device'' lets the user connect to a different bluetooth device. ``Clear stored codes'' lets the user clear all stored codes in their car. This is used after a repair is done, and the user has fixed the issue that the code is complaining about.
 
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/spinner.png}
+\caption{Showing activity during long operations}
+\label{fig: spinner}
+\end{figure}
 
+Figure \ref{fig: spinner} shows what the app looks like when running
+a long running task in the background. The main UI thread is spinning
+the spinner, and the actual work in happening in the background. This
+is so the user doesn't think that their phone has locked up.
+
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/errormessage.png}
+\caption{Showing an error message from the microcontroller}
+\label{fig: error}
+\end{figure} 
+
+Figure \ref{fig: error} is showing the dialog that pops up when the
+app encounters an error. In this case, it's showing an error when
+scanning for codes from the car. The hardware could not connect to the
+car.
+
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/clearcodes.png}
+\caption{Asking the user if they would like to clear the codes from
+  their car}
+\label{fig: clearcodes}
+\end{figure}
+
+Figure \ref{fig: clearcodes} is showing the dialog asking the user if
+they are really sure they would like to clear the codes from their
+car. This is a dangerous operation beause you could lose information
+that you did not intend to if you accidently tap the ``Clear stored
+codes'' action. Therefore, the affermation dialog is to make sure the
+user truely indends to clear codes before doing so.
 \subsection{Alternative Designs}
 \subsubsection{Hardware}
 In terms of hardware a few designs were created and thrown out. Discarding designs that didn't work functionally after careful consideration one initial idea the team had was to use a Raspberry Pi to do the hardware backend jobs such as interpreting messages and sending them over Bluetooth. Such a design was discarded mostly due to cost and size of the device.\\ 
