@@ -19,6 +19,16 @@
 \usepackage{indentfirst}
 \usepackage{float}
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black,
+    pdfborder = {0 0 0}
+}
+
 \begin{document}
 
 \maketitle
@@ -152,6 +162,7 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 \end{figure}
 
 \subsection{Chosen Design}
+\subsubsection{Hardware}
 \begin{figure}[H]
 \centering
 \includegraphics[page=1, totalheight=20cm]{images/mcu_sch.pdf}
@@ -205,6 +216,44 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 \end{figure}
 
 Figure \ref{fig: flow} shows the information flow from the bluetooth module to the Android phone. The data is encrypted before it is sent over the air. This also has the effect of not allowing random devices to connect to the bluetooth module. 
+
+\subsubsection{Software}
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/turnonbt.png}
+\caption{Asking to turn on Bluetooth}
+\label{fig: turnonbt}
+\end{figure}
+
+Figure \ref{fig: turnonbt} shows the first screen when the user opens the app and doesn't have Bluetooth turned on. Since the app is useless without BT, it makes sense to try and turn it on. This is why the app needs the BLUETOOTH\_ADMIN permission.
+
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/pickdevice.png}
+\caption{Picking a device to connect to}
+\label{fig: pickdevice}
+\end{figure}
+
+Actually pairing with BT devices is handled on the OS level on Android phones. The app asks (Figure \ref{fig: pickdevice}) which of the previously paired devices to connect to.
+
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/btconnected.png}
+\caption{A bluetooth device is connected, the app is ready to download codes}
+\label{fig: btconnected}
+\end{figure}
+
+Figure \ref{fig: btconnected} shows the app as shown to the user when it is connected to a bluetooth device and it is ready to download codes from the car. All of the hardware control is done though the Android app.
+
+\begin{figure}[H]
+\centering
+\includegraphics[totalheight=15cm]{images/pickaoption.png}
+\caption{Picking an action to take}
+\label{fig: pickoption}
+\end{figure}
+
+Figure \ref{fig: pickoption} shows what the user sees for avaliable actions to take. ``Get codes'' is the main function, and will tell the hardware to scan for codes. ``Connect to bluetooth device'' lets the user connect to a different bluetooth device. ``Clear stored codes'' lets the user clear all stored codes in their car. This is used after a repair is done, and the user has fixed the issue that the code is complaining about.
+
 
 \subsection{Alternative Designs}
 \subsubsection{Hardware}
