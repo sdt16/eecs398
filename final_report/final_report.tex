@@ -218,53 +218,6 @@ Finally, the app will only be using the bluetooth radio when needed, because usi
 
 Figure \ref{fig:flow} shows the information flow from the bluetooth module to the Android phone. The data is encrypted before it is sent over the air. This also has the effect of not allowing random devices to connect to the bluetooth module. \\
 
-The process for actually building the hardware was done in phases. When possible the team tried to divide modules into small units that could then be tested independent of the rest of the design. That way problem areas were kept as small as possible. Another advantage of using small units is to effectively allow for integration testing between the different components of the design. The formal steps taken to this approach are as follows:
-
-\begin{itemize}
-\item Build and then unit test the Bluetooth module. (Shown in Figure \ref{fig:btinterface})
-\begin{figure}[H]
-\centering
-\includegraphics[page=1, totalheight=7cm]{images/btinterface.png}
-\caption{Bluetooth Module}
-\label{fig:btinterface}
-\end{figure}
-
-\item Build then unit test the MCU. (Shown in Figure \ref{fig:odbinterface})
-\begin{figure}[H]
-\centering
-\includegraphics[page=1, totalheight=7cm]{images/obdiiinterface.png}
-\caption{OBD-II Interface}
-\label{fig:odbinterface}
-\end{figure}
-
-\item Integration testing between the MCU and Bluetooth module
-
-\item Build then unit test a subset of the power supply. (Shown in Figure \ref{fig:powersupply1})
-\begin{figure}[H]
-\centering
-\includegraphics[page=1, totalheight=7cm]{images/powersupply.png}
-\caption{Partially built power supply circuitry}
-\label{fig:powersupply1}
-\end{figure}
-
-\item Integration testing between power supply and device
-
-\item Build then unit test the 5 protocols required for OBD-II. (Shown in Figures \ref{fig:canprotocol} and \ref{fig:kwprotocol})
-\begin{figure}[H]
-\centering
-\includegraphics[page=1, totalheight=7cm]{images/canprotocol.png}
-\caption{CAN protocol}
-\label{fig:canprotocol}
-\end{figure}\begin{figure}[H]
-\centering
-\includegraphics[page=1, totalheight=7cm]{images/kwp.png}
-\caption{Keyword2000 Protocol}
-\label{fig:kwprotocol}
-\end{figure}
-
-\item Build and unit test the remainder of the power supply
-\item Final integration testing and field testing
-\end{itemize}
 
 \subsubsection{Software}
 \begin{figure}[H]
@@ -360,9 +313,71 @@ Functionally no design changes have been needed since the project proposal.
 \newpage
 
 \section{Results}
-In terms of part purchases the team currently has almost all the components to complete a first build. The only missing components are an OBD-cable, a fuse holder, and the transient voltag suppressors. All of these components will only be used in the final few steps of the build and as such are of negligable importance for project progress at this point in time. \\
+\subsection{OBD-II Interface Component}
+The OBD-II interface and MCU were united into one unit and all protocols were built and tested in the lab. Further verification testing needs to be done with VPW and PWM in a physical car setting. However the team was able to fake data to these respective components and the data observed was what the team expected which indicates that the two protocols should work in an actual car. Below is an itemized list of all specifications and their status:
 
-So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and some what test the CAN transceiver. Below are photos of the circuits build so far. The lower left corner of the breadboard contains the Bluetooth module and above that is the level shifter required to interface with the microcontroller. Directly left of the Bluetooth module is the CAN transceiver with takes a differetial voltage signal and converts it to logic levels. \\ 
+\begin{itemize}
+	\item This component requires a circuit which will have the functionality to interface directly to a car's OBD-II port. \textbf{Accomplished}
+	\item This component is required to plug into the data link connector specified in the OBD-II specification SAE J1962 \textbf{Accomplished}
+	\item This component will need to be able to act as a transceiver with the OBD-II port. \textbf{Accomplished}
+	\item The component will also be responsible for encoding and decoding messages for each of the protocols allowed in the OBD-II standard which are: 
+	\begin{enumerate}
+		\item SAE J1850 (VPW) \textbf{Built and unit and integration testing complete}
+		\item SAE J1850 (PWM) \textbf{Built and unit and integration testing complete}
+		\item ISO 9141-2 (LIN) \textbf{Accomplished}
+		\item ISO 14230 (Keyword Protocol 2000) \textbf{Accomplished}
+		\item ISO 15765 (CAN) \textbf{Accomplished}
+	\end{enumerate}
+	\item This component will be required to communicate with the central microcontroller in via UART. \textbf{Accomplished}
+	\item This component will be powered from the OBD-II port. \textbf{Accomplished}
+	\item This component will be responsible for buffering messages until they can be sent to the MCU. \textbf{Unnecessary}
+\end{itemize}
+
+\subsection{Bluetooth Interface Component}
+All items in this section were successfully accomplished. Below is an itemized list of all specifications and their status:
+
+\begin{itemize}
+	\item This component will be required to adhere to the Bluetooth 2.1+ specification. \textbf{Accomplished}
+	\item This component will be required to communicate with the central microcontroller in via UART. \textbf{Accomplished}
+	\item This board will be responsible for communicating via Bluetooth to Android enabled devices. \textbf{Accomplished}
+	\item This component will be powered from the OBD-II port. \textbf{Accomplished}
+	\item This component will be responsible for setting up Bluetooth communications with Android enabled devices. \textbf{Accomplished}
+	\item This component will be responsible for negotiating the shared key for cryptography purposes. \textbf{Accomplished}
+\end{itemize}
+
+\subsection{Central Microcontroller}
+All items in this section were successfully accomplished. Below is an itemized list of all specifications and their status: 
+
+\begin{itemize}
+	\item This MCU must be able to communicate with the OBD-II interface component via UART. \textbf{Accomplished}
+	\item This MCU must be able to communicate with the Bluetooth interface component via UART. \textbf{Accomplished}
+	\item This component will be powered from the OBD-II port. \textbf{Accomplished}
+	\item The MCU will be used to control message flow of the system. \textbf{Accomplished}
+	\item The MCU with be required to store a list of recent pairing keys to allow Android devices to auto-connect. \textbf{Accomplished}
+\end{itemize} 
+
+\subsection{Bluetooth Functionality Android-side}
+All items in this section were successfully accomplished. Below is an itemized list of all specifications and their status:
+
+\begin{itemize}
+	\item There will be writing an Android app to receive data from the OBD reader. \textbf{Accomplished}
+	\item It will use the Android SDK to implement the bluetooth functionality. \textbf{Accomplished}
+	\item The app will be able to display all of the basic messages from the diagnostic part of OBD. This includes the fault codes, monitor readiness, and whether the malfunction indicator light (MIL) is on or off. \textbf{Accomplished}
+	\item The app will use the Android Holo theme, and will follow the generally accepted design principals of Android UI design. \textbf{Accomplished}
+	\item The app will pair with one dongle at a time. \textbf{Accomplished}
+	\item The app will work with Android 4.1. \textbf{Accomplished}
+
+\end{itemize}
+
+\subsection{Cryptographically Securing Messages}
+All items in this section were successfully accomplished. Below is an itemized list of all specifications and their status:
+
+\begin{itemize}
+	\item Will use ``Just Works" form of pairing. \textbf{Accomplished}
+	\item The pairing key will be stored on the non-Android side of communication in the MCU. \textbf{Accomplished}
+	\item Both devices must acknowledge the pairing request. \textbf{Accomplished}
+\end{itemize} 
+
 
 \newpage
 
@@ -373,6 +388,51 @@ The verification procedures are divided among a few different phases. The first 
 The next step of the verification process involves bench-top testing. This step involves "faking" input signals to the component to test the function of a particular component. This way it is possible to verify that not only does the component properly function but it is working accordingly. \\
 
 The next step is to test the limits of the device to ensure that the device is immune to the environments seen in a car and to test that the device will be reliable under stress. This step is optional depending ont the components being tested. \\
+
+The process for actually building the hardware was done in phases. When possible the team tried to divide modules into small units that could then be tested independent of the rest of the design. That way problem areas were kept as small as possible. Another advantage of using small units is to effectively allow for integration testing between the different components of the design. The formal steps taken to this approach are as follows:
+
+\begin{itemize}
+\item Build and then unit test the Bluetooth module. (Shown in Figure \ref{fig:btinterface})
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/btinterface.png}
+\caption{Bluetooth Module}
+\label{fig:btinterface}
+\end{figure}
+
+\item Build then unit test the MCU. (Shown in Figure \ref{fig:odbinterface})
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/obdiiinterface.png}
+\caption{OBD-II Interface}
+\label{fig:odbinterface}
+\end{figure}
+
+\item Integration testing between the MCU and Bluetooth module
+
+\item Build then unit test a subset of the power supply. (Shown in Figure \ref{fig:powersupply1})
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/powersupply.png}
+\caption{Partially built power supply circuitry}
+\label{fig:powersupply1}
+\end{figure}
+
+\item Integration testing between power supply and device
+
+\item Build then unit test the 5 protocols required for OBD-II. (Shown in Figures \ref{fig:canprotocol} and \ref{fig:kwprotocol})
+\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/canprotocol.png}
+\caption{CAN protocol}
+\label{fig:canprotocol}
+\end{figure}\begin{figure}[H]
+\centering
+\includegraphics[page=1, totalheight=7cm]{images/kwp.png}
+\caption{Keyword2000 Protocol}
+\label{fig:kwprotocol}
+\end{figure}
+\end{itemize}
 
 The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual envirnoment they in which they are meant to be used.
 
