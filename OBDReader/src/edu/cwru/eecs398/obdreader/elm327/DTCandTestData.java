@@ -1,5 +1,9 @@
-/*
+/**
  * DTCandTestData.java
+ * 
+ * Modified by Schuyler Thompson to work with Android.
+ * 
+ * Adapted from http://sourceforge.net/projects/elmhandler/
  *
  * Copyright (c) 2007-2008 Tim Wootton <tim@tee-jay.demon.co.uk>
  *

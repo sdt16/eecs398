@@ -9,8 +9,15 @@ import edu.cwru.eecs398.obdreader.elm327.ELMProtocolHandler;
 import edu.cwru.eecs398.obdreader.elm327.ErrorMessageException;
 import edu.cwru.eecs398.obdreader.elm327.OBDProtocolHandler;
 
+/**
+ * This task reads the codes from the ELM327, and returns the results to the
+ * MainActivity.
+ * 
+ * @author Schuyler Thompson
+ * 
+ */
 public class GetCodesAsyncTask extends
-AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
+		AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
 
 	private static final String TAG = "GetCodes";
 	private final MainActivity callingActivity;
@@ -18,6 +25,12 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
 	private final LinearLayout infoTextLayout;
 	private final LinearLayout codesLayout;
 
+	/**
+	 * Setup the class.
+	 * 
+	 * @param ctx
+	 *            The MainActivity instance in use.
+	 */
 	public GetCodesAsyncTask(final MainActivity ctx) {
 		layoutWithSpinner = (LinearLayout) ctx
 				.findViewById(R.id.layoutWithSpinner);
@@ -26,6 +39,9 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
 		callingActivity = ctx;
 	}
 
+	/**
+	 * Clear the view and show the spinner.
+	 */
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
@@ -62,6 +78,10 @@ AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<DTCandTestData>> {
 		return new AsyncTaskResult<DTCandTestData>(data);
 	}
 
+	/**
+	 * Make sure to clear the spinner. The Activity will determine the next view
+	 * to show.
+	 */
 	@Override
 	protected void onPostExecute(final AsyncTaskResult<DTCandTestData> result) {
 		if (result.getResult() != null) {

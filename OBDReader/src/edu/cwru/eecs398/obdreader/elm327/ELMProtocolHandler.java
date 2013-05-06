@@ -12,12 +12,29 @@ import android.util.Log;
 /**
  * Handles the ELM327 protocol.
  * 
- * Heavily influenced by:
- * http://elmhandler.svn.sourceforge.net/viewvc/elmhandler
- * /ELMHandler/src/net/sourceforge
- * /ELMHandler/obd/elm/ELMProtocolHandler.java?revision=2&view=markup
+ * Heavily influenced by: http://sourceforge.net/projects/elmhandler/
  * 
- * @author schuyler
+ * Adapted by Schuyler Thompson to work with Android.
+ * 
+ * Copyright (c) 2007-2008 Tim Wootton <tim@tee-jay.demon.co.uk>
+ * 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option)
+ * anyradians_radians_later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * References: ELM327DSA OBD to RS232 Interpreter data Sheet by Elm Electronics
+ * <www.emlelectronics.com>
  * 
  */
 public class ELMProtocolHandler extends Thread {
@@ -28,8 +45,8 @@ public class ELMProtocolHandler extends Thread {
 	private static final String BUS_INIT = "BUS INIT: ...";
 	private static final String NO_DATA = "NO DATA";
 	private static final String[] ERROR_MSGS = { "BUFFER FULL", "BUS BUSY",
-		"BUS ERROR", "CAN ERROR", "FB ERROR", "DATA ERROR", "<DATA ERROR",
-		"<RX ERROR", "UNABLE TO CONNECT", "?" };
+			"BUS ERROR", "CAN ERROR", "FB ERROR", "DATA ERROR", "<DATA ERROR",
+			"<RX ERROR", "UNABLE TO CONNECT", "?" };
 
 	private final InputStream in;
 	private final OutputStream out;
@@ -147,13 +164,14 @@ public class ELMProtocolHandler extends Thread {
 						final String oldRx = rxData;
 						rxData = rxData.substring(rxData.indexOf(ERROR_MSGS[i])
 								+ ERROR_MSGS[i].length()
-								/* + ((2 * LT.length()) + PROMPT.length()) */);
+						/* + ((2 * LT.length()) + PROMPT.length()) */);
 						throw new ErrorMessageException(oldRx);
 					}
 				}
 				if (rxData.contains(str)) {
 					preString = rxData.substring(0, rxData.indexOf(str));
-					rxData = rxData.substring(rxData.indexOf(str) + str.length());
+					rxData = rxData.substring(rxData.indexOf(str)
+							+ str.length());
 					return preString;
 				}
 			}
@@ -297,6 +315,5 @@ public class ELMProtocolHandler extends Thread {
 		}
 		return retVal;
 	}
-
 
 }

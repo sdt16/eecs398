@@ -1,6 +1,6 @@
 package edu.cwru.eecs398.obdreader.elm327;
 
-/*
+/**
  * OBDParamCollection.java
  *
  * Copyright (c) 2007-2008 Tim Wootton <tim@tee-jay.demon.co.uk>
@@ -34,8 +34,14 @@ import edu.cwru.eecs398.obdreader.R;
 /**
  * 
  * @author Tim Wootton <tim@tee-jay.demon.co.uk>
+ * @author Schuyler Thompson, to work with Android.
  */
 public class OBDParamCollection extends HashMap<Integer, OBDParameter> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final String TAG = "OBDParamCollection";
 

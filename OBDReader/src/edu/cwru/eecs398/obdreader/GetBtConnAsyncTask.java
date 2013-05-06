@@ -9,23 +9,29 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.LinearLayout;
 
+/**
+ * Connect to a BT device.
+ * 
+ * @author Schuyler Thompson
+ * 
+ */
 public class GetBtConnAsyncTask extends
-AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
+		AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
 
+	/**
+	 * The UUID for SPP communication, a standard BT protocol value.
+	 */
 	static final UUID UUID_RFCOMM_GENERIC = UUID
 			.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
 	private final MainActivity callingActivity;
 	private final LinearLayout layoutWithSpinner;
 	private final LinearLayout infoTextLayout;
-	private final LinearLayout codesLayout;
-
 
 	public GetBtConnAsyncTask(final MainActivity ctx) {
 		layoutWithSpinner = (LinearLayout) ctx
 				.findViewById(R.id.layoutWithSpinner);
 		infoTextLayout = (LinearLayout) ctx.findViewById(R.id.infoTextLayout);
-		codesLayout = (LinearLayout) ctx.findViewById(R.id.codesLayout);
 		callingActivity = ctx;
 	}
 
@@ -40,14 +46,6 @@ AsyncTask<BluetoothDevice, Void, AsyncTaskResult<BluetoothSocket>> {
 	@Override
 	protected AsyncTaskResult<BluetoothSocket> doInBackground(
 			final BluetoothDevice... arg0) {
-
-		/*
-		 * final BluetoothServerSocket serverSocket = btAdapter
-		 * .listenUsingRfcommWithServiceRecord( "OBDBluetooth",
-		 * UUID_RFCOMM_GENERIC);
-		 * 
-		 * btSocket = serverSocket.accept();
-		 */
 
 		try {
 			final BluetoothSocket btSocket = arg0[0]

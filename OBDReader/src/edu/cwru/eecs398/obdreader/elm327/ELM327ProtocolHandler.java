@@ -6,14 +6,9 @@ import java.io.OutputStream;
 import android.util.Log;
 
 /**
- * Adapted from
- * http://elmhandler.svn.sourceforge.net/viewvc/elmhandler/ELMHandler
- * /src/net/sourceforge
- * /ELMHandler/obd/elm/ELM327ProtocolHandler.java?revision=2&
- * content-type=text%2Fplain
+ * Modified by Schuyler Thompson to work with Android.
  * 
- * Original notice:
- * ELM327ProtocolHandler.java
+ * Adapted from http://sourceforge.net/projects/elmhandler/
  * 
  * Copyright (c) 2007-2008 Tim Wootton <tim@tee-jay.demon.co.uk>
  * 
@@ -39,22 +34,12 @@ public class ELM327ProtocolHandler extends ELMProtocolHandler {
 
 	private static final String TAG = "ELM327ProtocolHandler";
 
-	public enum OBDProtocol{
-		OBD_AUTO,
-		OBD_SAE_J1850_PWM,
-		OBD_SAE_J1850_VPW,
-		OBD_ISO_9141_2,
-		OBD_ISO_14230_4_KWP,
-		OBD_ISO_14230_4_KWP_FAST_INIT,
-		OBD_ISO_15765_4_CAN_11BIT_500KB,
-		OBD_ISO_15765_4_CAN_29BIT_500KB,
-		OBD_ISO_15765_4_CAN_11BIT_250KB,
-		OBD_ISO_15765_4_CAN_29BIT_250KB
+	public enum OBDProtocol {
+		OBD_AUTO, OBD_SAE_J1850_PWM, OBD_SAE_J1850_VPW, OBD_ISO_9141_2, OBD_ISO_14230_4_KWP, OBD_ISO_14230_4_KWP_FAST_INIT, OBD_ISO_15765_4_CAN_11BIT_500KB, OBD_ISO_15765_4_CAN_29BIT_500KB, OBD_ISO_15765_4_CAN_11BIT_250KB, OBD_ISO_15765_4_CAN_29BIT_250KB
 	}
 
-	public enum ISOBaudRate{
-		ISO_BAUD_10400,
-		ISO_BAUD_9600
+	public enum ISOBaudRate {
+		ISO_BAUD_10400, ISO_BAUD_9600
 	}
 
 	public ELM327ProtocolHandler(final InputStream in, final OutputStream out) {
