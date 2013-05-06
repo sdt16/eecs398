@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -37,6 +38,13 @@ import edu.cwru.eecs398.obdreader.elm327.DTCandTestData;
 import edu.cwru.eecs398.obdreader.elm327.ELMProtocolHandler;
 import edu.cwru.eecs398.obdreader.elm327.OBDProtocolHandler;
 
+/**
+ * The activity for the app. This is where all of the UI activity takes place.
+ * Also this activity dispatches work to all of the {@link AsyncTask}s.
+ * 
+ * @author Schuyler Thompson
+ * 
+ */
 public class MainActivity extends FragmentActivity {
 
 	private static final String TAG = "MainActivity";
@@ -59,7 +67,6 @@ public class MainActivity extends FragmentActivity {
 	private DTCandTestData dtcCodes;
 	private OBDProtocolHandler obdHandler;
 
-
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,9 +80,10 @@ public class MainActivity extends FragmentActivity {
 
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (btAdapter == null) {
-			//device doesn't support bt
+			// device doesn't support bt
 		} else if (!btAdapter.isEnabled()) {
-			final Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			final Intent enableBtIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 		} else {
 			pickBtDevice();
@@ -141,12 +149,13 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	@Override
-	public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+	public void onActivityResult(final int requestCode, final int resultCode,
+			final Intent data) {
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == RESULT_OK) {
 				pickBtDevice();
 			} else {
-				//bt is off
+				// bt is off
 			}
 		}
 	}
@@ -163,34 +172,32 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void pickBtDevice() {
-		final ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>(btAdapter.getBondedDevices());
+		final ArrayList<BluetoothDevice> pairedDevices = new ArrayList<BluetoothDevice>(
+				btAdapter.getBondedDevices());
 		if (pairedDevices.size() > 0) {
 			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.pick_bt_device);
 			final String[] deviceStrings = new String[pairedDevices.size()];
-			for (int i = 0; i<pairedDevices.size(); i++) {
-				deviceStrings[i] = pairedDevices.get(i).getName() + " (" + pairedDevices.get(i).getAddress() + ")\n";
+			for (int i = 0; i < pairedDevices.size(); i++) {
+				deviceStrings[i] = pairedDevices.get(i).getName() + " ("
+						+ pairedDevices.get(i).getAddress() + ")\n";
 			}
 			final MainActivity ctx = this;
 			builder.setItems(deviceStrings,
-					new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(final DialogInterface dialog, final int which) {
-					pickedDevice = true;
-					try {
-						new GetBtConnAsyncTask(ctx).execute(pairedDevices.get(which));
-					} catch (final RuntimeException e) {
-						Log.e(TAG, "Error getting socket", e);
-						makeErrorDialog(e);
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(final DialogInterface dialog,
+							final int which) {
+						pickedDevice = true;
+						try {
+							new GetBtConnAsyncTask(ctx)
+									.execute(pairedDevices.get(which));
+						} catch (final RuntimeException e) {
+							Log.e(TAG, "Error getting socket", e);
+							makeErrorDialog(e);
+						}
 					}
-					// final BluetoothConnectionThread
-					// connectionThread = new
-					// BluetoothConnectionThread(pairedDevices.get(which),
-					// btAdapter);
-					// connectionThread.start();
-				}
-			});
+				});
 			builder.show();
 		}
 	}
@@ -206,8 +213,8 @@ public class MainActivity extends FragmentActivity {
 		}
 		btSocket = socket;
 		try {
-			elm = new ELMProtocolHandler(
-					btSocket.getInputStream(), btSocket.getOutputStream());
+			elm = new ELMProtocolHandler(btSocket.getInputStream(),
+					btSocket.getOutputStream());
 			elm.start();
 		} catch (final IOException e) {
 			Log.e(TAG, "Error init BT socket", e);
@@ -243,7 +250,8 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public void onRestoreInstanceState(final Bundle savedInstanceState) {
-		pickedDevice = savedInstanceState.getBoolean(STATE_BLUETOOTH_DEVICE_PICKED);
+		pickedDevice = savedInstanceState
+				.getBoolean(STATE_BLUETOOTH_DEVICE_PICKED);
 		dtcCodes = (DTCandTestData) savedInstanceState
 				.getSerializable(STATE_DOWNLOADED_CODES);
 	}
@@ -267,8 +275,7 @@ public class MainActivity extends FragmentActivity {
 			// Thread.sleep(2000);
 			task.execute(new ELMProtocolHandler[] { elm });
 		} else {
-			final AlertDialog.Builder builder = new AlertDialog.Builder(
-					this);
+			final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.Error);
 			builder.setMessage(R.string.connect_to_bt_first);
 			builder.setPositiveButton("OK", null);
@@ -338,14 +345,15 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		@Override
-		public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
-				final Bundle savedInstanceState) {
+		public View onCreateView(final LayoutInflater inflater,
+				final ViewGroup container, final Bundle savedInstanceState) {
 			// Create a new TextView and set its text to the fragment's section
 			// number argument value.
 			final ArrayList<String> codes = getArguments().getStringArrayList(
 					ARG_CODES);
 			final boolean mil = getArguments().getBoolean(ARG_MIL);
-			final boolean btConnected = getArguments().getBoolean(ARG_BT_CONNECTED);
+			final boolean btConnected = getArguments().getBoolean(
+					ARG_BT_CONNECTED);
 			if (codes != null) {
 				final ListView listView = new ListView(getActivity());
 				final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(

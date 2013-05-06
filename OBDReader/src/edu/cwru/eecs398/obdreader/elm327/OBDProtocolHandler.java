@@ -27,6 +27,9 @@ import android.content.Context;
 import android.util.Log;
 
 /**
+ * Modified by Schuyler Thompson to work with Android.
+ * 
+ * Adapted from http://sourceforge.net/projects/elmhandler/
  * 
  * @author Tim Wootton <tim@tee-jay.demon.co.uk>
  */

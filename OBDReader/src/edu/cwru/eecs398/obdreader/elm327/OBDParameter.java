@@ -22,6 +22,10 @@ package edu.cwru.eecs398.obdreader.elm327;
  */
 
 /**
+ * * Modified by Schuyler Thompson to work with Android.
+ * 
+ * Adapted from http://sourceforge.net/projects/elmhandler/
+ * 
  * A class to represent and calculate values for an OBD parameter
  * 
  * @author Tim Wootton <tim@tee-jay.demon.co.uk>

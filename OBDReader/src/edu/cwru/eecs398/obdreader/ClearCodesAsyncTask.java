@@ -8,8 +8,14 @@ import edu.cwru.eecs398.obdreader.elm327.ELMProtocolHandler;
 import edu.cwru.eecs398.obdreader.elm327.ErrorMessageException;
 import edu.cwru.eecs398.obdreader.elm327.OBDProtocolHandler;
 
+/**
+ * Task to clear diagnostic codes from a car, and reset the MIL.
+ * 
+ * @author Schuyler Thompson
+ * 
+ */
 public class ClearCodesAsyncTask extends
-AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<Boolean>> {
+		AsyncTask<ELMProtocolHandler, Void, AsyncTaskResult<Boolean>> {
 
 	private static final String TAG = "ClearCodes";
 	private final MainActivity callingActivity;

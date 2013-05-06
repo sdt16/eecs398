@@ -32,6 +32,11 @@ import android.util.Log;
 import edu.cwru.eecs398.obdreader.R;
 
 /**
+ * 
+ * Modified by Schuyler Thompson to work with Android.
+ * 
+ * Adapted from http://sourceforge.net/projects/elmhandler/
+ * 
  * A HashMap based collection of objects of class DTC, keyed on the integer
  * representation of the diagnostic trouble code. The difference between this
  * class and an instance of HashMap is the method provided to poulate the
