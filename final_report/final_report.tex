@@ -115,7 +115,7 @@ This project has quite a few objectives because there are quite a few parts to i
 	\item It will use the Android SDK to implement the bluetooth functionality.
 	\item The app will be able to display all of the basic messages from the diagnostic part of OBD.
 	\item This includes the fault codes, monitor readiness, and whether the malfunction indicator light (MIL) is on or off.
-	\item The OBD fault codes follow a pattern of N0000, a letter followed by 4 numbers. The app will contain the database of all of the standard codes and their meanings for easy lookup. A listing of these codes is avalable at Listing \ref{apen:codes} in Appendix A.
+	\item The OBD fault codes follow a pattern of N0000, a letter followed by 4 numbers. The app will contain the database of all of the standard codes and their meanings for easy lookup. A listing of these codes is available at Listing \ref{apen:codes} in Appendix A.
 	\item  The monitor readiness is indicating whether the all of the monitors used by the OBD system are ready to make a reading. They are reset when the OBD system is reset, and if the monitors are set to not ready, the car will fail any emissions check performed by a DMV. 
 	\item The MIL is the light commonly known as the check engine light. 
 	\item The app will use the Android Holo theme, and will follow the generally accepted design principals of Android UI design.
@@ -435,7 +435,7 @@ The process for actually building the hardware was done in phases. When possible
 \end{figure}
 \end{itemize}
 
-The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual envirnoment they in which they are meant to be used.
+The next steps are integration testing and in-car testing. Integration testing involves testing the interoperability of various different components with each other. The process involves faking data and making sure that the communication between components successfully reaches one end of the pipeline of information flow. In-car testing is finally done to verify that the components work successfully in the actual environment they in which they are meant to be used.
 
 \subsubsection{Software}
 It will be easy to verify that the correct data is flowing from the OBD side to the app because a serial console can be used to see the exact data going in and out. The app can be verified that the data is correct by looking at the serial console's output and comparing it to the data shown in the app. If it matches, the verification worked. The software simobd will also be used to simulate a generic ELM327 protocol device and can generate valid random data. This will allow us to test the app against data that might not be able to be replicated in the real world with the resources available. 
@@ -452,8 +452,8 @@ It will be easy to verify that the correct data is flowing from the OBD side to 
 \begin{tabular}{| l | p{7cm} | c | c |}
 \hline
 Item & Description & Price (\$ USD) & Availability \\ \hline
-STN1110 & OBD-II Interface core & 0.00 & Volitile \\ \hline
-Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 & Volitile \\ \hline
+STN1110 & OBD-II Interface core & 0.00 & Volatile \\ \hline
+Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 & Volatile \\ \hline
 Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 & Stable \\ \hline
 Scanner Tool & To test/validate OBD messages & 15.00 & Stable\\ \hline
 MCP2515 & CAN Encoder/Decoder (Testing only) & 1.98 & Stable\\ \hline
