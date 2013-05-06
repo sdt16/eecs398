@@ -141,7 +141,6 @@ The group is using a variety of design principles to accomplish this design that
 In terms of hardware the design was largely constrained to fit to the OBD-II specification, where freedom was available parts were choosen based off three main criteria: price, safety margin, and ease of use. First and foremost the device must be safe to use as a general rule parts that were choosen to work in critical areas (such as the voltage regulators) with a safety margin of 2x meaning that if a requirement was rated at a value of y a part was choosen with a rated value of twice as much or 2y. Secondly parts were choosen that were easy with which to design. This means that where applicable transistors were choosen over MOSFETS, and discrete components were choosen over IC's. This also has the added benefit of keeping the costs low. Finally in an additional measure the specs were somewhat designed based on the circuits labs' inventory since for every component available in the lab means that the lead time and price associated with buying such a part are effectively zero. \\
 
 
-
 \subsubsection{Software}
 The software will be using the standard ELM327 OBD software protocol. This is a well supported serial protocol for communicating with OBD transceivers. This will allow the Android app to communicate with other ELM327 based OBD trancevers. The protocol serialization and deserialization is also well isolated in order to let us swap out a different command set if needed in the future without affecting the rest of the app. 
 
@@ -342,6 +341,7 @@ car. This is a dangerous operation beause you could lose information
 that you did not intend to if you accidently tap the ``Clear stored
 codes'' action. Therefore, the affermation dialog is to make sure the
 user truely indends to clear codes before doing so.
+
 \subsection{Alternative Designs}
 \subsubsection{Hardware}
 In terms of hardware a few designs were created and thrown out. Discarding designs that didn't work functionally after careful consideration one initial idea the team had was to use a Raspberry Pi to do the hardware backend jobs such as interpreting messages and sending them over Bluetooth. Such a design was discarded mostly due to cost and size of the device.\\ 
@@ -362,9 +362,7 @@ Functionally no design changes have been needed since the project proposal.
 \section{Results}
 In terms of part purchases the team currently has almost all the components to complete a first build. The only missing components are an OBD-cable, a fuse holder, and the transient voltag suppressors. All of these components will only be used in the final few steps of the build and as such are of negligable importance for project progress at this point in time. \\
 
-So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and some what test the CAN transceiver. Below are photos of the circuits build so far. The lower left corner of the breadboard contains the Bluetooth module and above that is the level shifter required to interface with the microcontroller. Directly left of the Bluetooth module is the CAN transceiver with takes a differetial voltage signal and converts it to logic levels. \\
-
-ADD PHOTOS HERE.
+So far the results have been promising. The team has been able to build and do some functional testing on the Bluetooth module. The teams has also been able to build and some what test the CAN transceiver. Below are photos of the circuits build so far. The lower left corner of the breadboard contains the Bluetooth module and above that is the level shifter required to interface with the microcontroller. Directly left of the Bluetooth module is the CAN transceiver with takes a differetial voltage signal and converts it to logic levels. \\ 
 
 \newpage
 
@@ -393,7 +391,7 @@ It will be easy to verify that the correct data is flowing from the OBD side to 
 \begin{tabular}{| l | p{7cm} | c | c |}
 \hline
 Item & Description & Price (\$ USD) & Availability \\ \hline
-STN1110 & OBD-II Interface core & 0.00& Volitile \\ \hline
+STN1110 & OBD-II Interface core & 0.00 & Volitile \\ \hline
 Microchip RN-41 & Bluetooth stack implementation on IC & 19.90 & Volitile \\ \hline
 Atmel ATMEGA328 & Not sure exactly which AVR core & 0.00 & Stable \\ \hline
 Scanner Tool & To test/validate OBD messages & 15.00 & Stable\\ \hline
